@@ -6,6 +6,8 @@ import { IoClose } from "react-icons/io5";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function Header({ handleStateChange, getData }) {
     const [sideBar, setSideBar] = useState(false)
     const [userDetails, setUserDetails] = useState({})
@@ -19,7 +21,7 @@ function Header({ handleStateChange, getData }) {
 
     async function fetchUser() {
         try {
-            const response = await axios.post("/api/v1/admin/admin-details")
+            const response = await axios.post(`${backend}/api/v1/admin/admin-details`)
             if (response.data.statusCode === 200) {
                 setUserDetails(response.data.data)
                 if (getData) {

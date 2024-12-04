@@ -3,6 +3,8 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../utils/Loading'
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function AdminLogin() {
     const [adminDetails, setAdminDetails] = useState({
         email: '',
@@ -14,7 +16,7 @@ function AdminLogin() {
     async function loginAdmin() {
         try {
             setLoading(true)
-            const response = await axios.post('/api/v1/admin/login', adminDetails)
+            const response = await axios.post(`${backend}/api/v1/admin/login`, adminDetails)
             if (response.data.statusCode === 200) {
                 localStorage.setItem("adminId", JSON.stringify(response.data.data))
                 setLoading(false)
