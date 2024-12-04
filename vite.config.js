@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   server: {
     proxy: {
-      '/api': 'https://disappointed-jaquelyn-nexmentors-8a6117f1.koyeb.app/'
+      '/api': 'https://friendly-ladybug-nexmentors-ce2a9f3d.koyeb.app'
     }
   },
   plugins: [react()],
