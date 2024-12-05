@@ -8,11 +8,16 @@ import Header from './Header';
 import axios from 'axios';
 import Loading from '../utils/Loading'
 import { StarRating } from '../utils/StarRating';
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function MentorDashboard() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [userData, setUserData] = useState({})
     const [loading, setLoading] = useState(false)
+    const [mentorId, setMentorId] = useState('')
     const [searchStudent, setSearchStudent] = useState('')
     const [completedSessions, setCompletedSessions] = useState([])
     const [originalCompletedSessions, setOriginalCompletedSessions] = useState([]);
@@ -21,7 +26,7 @@ function MentorDashboard() {
         totalPages: 1,
         totalMentors: 0,
     });
-
+    const navigate = useNavigate()
 
     function formatNumber(num) {
         if (num >= 1000) {
@@ -38,7 +43,7 @@ function MentorDashboard() {
     async function fetchCompletedSession(page = 1) {
         try {
             setLoading(true)
-            const response = await axios.post(`/api/v1/mentors/all-complete-sessions?page=${page}`)
+            const response = await axios.post(`${backend}/api/v1/mentors/all-complete-sessions?page=${page}`, { mentorId })
             if (response.data.statusCode === 200) {
                 setCompletedSessions(response.data.data.data)
                 setOriginalCompletedSessions(response.data.data.data);
@@ -101,6 +106,24 @@ function MentorDashboard() {
     useEffect(() => {
         fetchCompletedSession(pagination.currentPage)
     }, [pagination.currentPage])
+
+    useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const userId = JSON.parse(localStorage.getItem("userId"))
+        const user = JSON.parse(localStorage.getItem("userType"))
+        if (token && userId && user === 'Mentor') {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === userId) {
+                setMentorId(decodedToken.id)
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("userId")
+            localStorage.removeItem("auth")
+            localStorage.removeItem("userType")
+        }
+    }, [])
 
     return (
         <>

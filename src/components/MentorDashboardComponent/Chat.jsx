@@ -4,16 +4,20 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import ChatSingle from './ChatSingle';
 import axios from 'axios';
 import Loading from '../utils/Loading';
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Chat() {
   const [chattingToUser, setChattingToUser] = useState([])
   const { id } = useParams()
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
-  async function getAllConversations() {
+  async function getAllConversations(mentorId) {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/message/all-conversations')
+      const response = await axios.post(`${backend}/api/v1/message/all-conversations`, { mentorId })
       if (response.data.statusCode === 200) setChattingToUser(response.data.data)
       setLoading(false)
     } catch (error) {
@@ -23,9 +27,22 @@ function Chat() {
   }
 
   useEffect(() => {
-    getAllConversations()
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Mentor') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        getAllConversations(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
   }, [])
-
 
   return (
     <>

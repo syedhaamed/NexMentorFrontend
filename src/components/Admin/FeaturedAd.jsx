@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import axios from 'axios';
 import Loading from '../utils/Loading';
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function FeaturedAd() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [loading, setLoading] = useState(false)
     const [previewImage, setPreviewImage] = useState(null)
+    const [adminId, setAdminId] = useState('')
     const [selectedImage, setSelectedImage] = useState(null)
     const [verificationAmount, setVerificationAmount] = useState('')
     const [settedVerificationAmount, setSettedVerificationAmount] = useState('')
+    const navigate = useNavigate()
 
     function handleStateChange() {
         setLocalSidebarState((prev) => !prev)
@@ -26,7 +32,7 @@ function FeaturedAd() {
     async function getAdminDetails() {
         try {
             setLoading(true)
-            const response = await axios.post('/api/v1/admin/admin-details')
+            const response = await axios.post(`${backend}/api/v1/admin/admin-details`, { id: adminId })
             if (response.data.statusCode === 200) {
                 setPreviewImage(response.data.data.featuredAd)
                 setSettedVerificationAmount(response.data.data.verificationAmount)
@@ -44,7 +50,8 @@ function FeaturedAd() {
             const formData = new FormData();
             if (verificationAmount !== settedVerificationAmount) formData.append("amount", verificationAmount);
             if (selectedImage) formData.append('image', selectedImage)
-            const response = await axios.post("/api/v1/admin/add-feature-ad", formData, {
+            if (adminId) formData.append('adminId', adminId)
+            const response = await axios.post(`${backend}/api/v1/admin/add-feature-ad`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -61,7 +68,20 @@ function FeaturedAd() {
     }
 
     useEffect(() => {
-        getAdminDetails()
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const adminId = JSON.parse(localStorage.getItem("adminId"))
+        if (token && adminId) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === adminId) {
+                setAdminId(decodedToken.id)
+                getAdminDetails()
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("adminId")
+            localStorage.removeItem("auth")
+        }
     }, [])
 
 

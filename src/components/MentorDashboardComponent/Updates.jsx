@@ -3,6 +3,8 @@ import Header from './Header'
 import axios from 'axios';
 import Loading from '../utils/Loading';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function Updates() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -30,7 +32,7 @@ function Updates() {
     async function getUpdates() {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/get-updates")
+            const response = await axios.post(`${backend}/api/v1/admin/get-updates`)
             if (response.data.statusCode === 200) {
                 setAdminDetails(response.data.data[0])
                 setLoading(false)

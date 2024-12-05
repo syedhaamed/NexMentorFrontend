@@ -14,6 +14,8 @@ import {
 import Logo from './images/logo2.webp';
 import ForgotImage from './images/loginSignupPageImages/forgetPassword.webp'
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ function ForgotPassword() {
     const sendResetLink = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axios.post("/api/v1/mentors/forgot-password", { email });
+            const response = await axios.post(`${backend}/api/v1/mentors/forgot-password`, { email });
             setLoading(false);
             if (response.data.statusCode === 200) {
                 setLinkSendPopUp(true);

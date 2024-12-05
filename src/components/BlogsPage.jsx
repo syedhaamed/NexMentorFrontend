@@ -5,6 +5,8 @@ import axios from 'axios'
 import Loading from './utils/Loading'
 import { NavLink } from 'react-router-dom'
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function BlogsPage() {
     const [totalBlogs, setTotalBlogs] = useState([])
     const [loading, setLoading] = useState(false)
@@ -12,7 +14,7 @@ function BlogsPage() {
     async function getBlogs() {
         try {
             setLoading(true)
-            const response = await axios.post('/api/v1/admin/get-blogs')
+            const response = await axios.post(`${backend}/api/v1/admin/get-blogs`)
 
             if (response.data.statusCode === 200) {
                 setLoading(false)
@@ -67,13 +69,13 @@ function BlogsPage() {
                                         className="w-full h-40 object-cover mx-auto border border-gray-400"
                                         loading="lazy" // Lazy load images
                                     />
-                                    <span className="mx-auto lg:text-lg font-semibold mt-3">{blog.title.slice(0,30)}</span>
+                                    <span className="mx-auto lg:text-lg font-semibold mt-3">{blog.title.slice(0, 30)}</span>
                                     <p className="w-full h-auto text-sm mt-2 text-gray-400">
                                         {blog.content.length > 180 ? `${blog.content.slice(0, 170)}...` : blog.content}
                                     </p>
                                 </div>
                                 <p className="flex justify-between items-center mt-3">
-                                    <NavLink state={{blog}} to='/single-blog' className="text-blue-500 font-cg-times md:hover:text-blue-600 active:text-blue-600 cursor-pointer hover:underline active:underline underline-offset-2">
+                                    <NavLink state={{ blog }} to='/single-blog' className="text-blue-500 font-cg-times md:hover:text-blue-600 active:text-blue-600 cursor-pointer hover:underline active:underline underline-offset-2">
                                         View
                                     </NavLink>
                                 </p>

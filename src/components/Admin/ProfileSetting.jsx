@@ -2,17 +2,23 @@ import React, { useState } from 'react'
 import Loading from '../utils/Loading'
 import Header from './Header'
 import axios from 'axios'
+import { useEffect } from 'react'
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom'
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function AdminProfileSetting() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [adminId,setAdminId] = useState('')
   const [updateDetails, setUpdateDetails] = useState({
     name: '',
     email: '',
   })
   const [previewImage, setPreviewImage] = useState(null)
   const [selectedImage, setSelectedImage] = useState(null)
+  const navigate = useNavigate()
 
   function handleStateChange() {
     setLocalSidebarState((prev) => !prev)
@@ -23,8 +29,9 @@ function AdminProfileSetting() {
       setLoading(true)
       const formData = new FormData()
       formData.append('email', updateDetails.email);
+      formData.append('adminId', adminId);
       if (selectedImage) formData.append('profilePicture', selectedImage)
-      const response = await axios.post("/api/v1/admin/update-details", formData, {
+      const response = await axios.post(`${backend}/api/v1/admin/update-details`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -55,6 +62,22 @@ function AdminProfileSetting() {
       setPreviewImage(URL.createObjectURL(file));
     }
   };
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const adminId = JSON.parse(localStorage.getItem("adminId"))
+    if (token && adminId) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === adminId) {
+        setAdminId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("adminId")
+      localStorage.removeItem("auth")
+    }
+  }, [])
 
   return (
     <>

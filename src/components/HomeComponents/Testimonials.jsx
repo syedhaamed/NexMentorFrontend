@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function Testimonials() {
     const [testimonials, setTestimonials] = useState([])
 
     async function getTestimonials() {
         try {
-            const response = await axios.post("/api/v1/admin/get-testimonial")
+            const response = await axios.post(`${backend}/api/v1/admin/get-testimonial`)
             if (response.data.statusCode === 200) {
                 setTestimonials(response.data.data)
             }

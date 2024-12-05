@@ -2,16 +2,22 @@ import React, { useState } from 'react'
 import Header from './Header'
 import { LuIndianRupee } from "react-icons/lu";
 import axios from 'axios'
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Wallet() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('Bank')
   const [info, setInfo] = useState('')
+  const [mentorId, setMentorId] = useState('')
   const [accountDetails, setAccountDetails] = useState({
     accountHolderName: '',
     ifscCode: ''
   })
   const [userData, setUserData] = useState({})
+  const navigate = useNavigate()
 
   const paymentMethods = ["Bank", "Google Pay", "Paytm", "PhonePe"]
 
@@ -30,7 +36,7 @@ function Wallet() {
 
   async function updateDetails() {
     try {
-      const response = await axios.post("/api/v1/mentors/update-payment-details", { paymentMethod: selectedPaymentMethod, paymentInfo: info, accountHolderName: accountDetails.accountHolderName, ifscCode: accountDetails.ifscCode })
+      const response = await axios.post(`${backend}/api/v1/mentors/update-payment-details`, { paymentMethod: selectedPaymentMethod, paymentInfo: info, accountHolderName: accountDetails.accountHolderName, ifscCode: accountDetails.ifscCode, mentorId })
       if (response.data.statusCode === 200) {
         alert("Payment details updated successfully")
         setInfo('')
@@ -41,6 +47,23 @@ function Wallet() {
     }
   }
 
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Mentor') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        setMentorId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
+  }, [])
 
   return (
     <div className='w-full h-auto flex flex-col bg-[#F4F4F4] lg:w-[70%] xl:w-[75%] 2xl:w-[80%]'>

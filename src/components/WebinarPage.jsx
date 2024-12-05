@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import { FaAngleRight } from "react-icons/fa6";
 import Faq from './HomeComponents/Faq'
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function WebinarPage() {
   const [webinarDetails, setWebinarDetails] = useState({})
   const [loading, setLoading] = useState(false)
@@ -17,7 +19,7 @@ function WebinarPage() {
   async function getAdminDetails() {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/get-webinar')
+      const response = await axios.post(`${backend}/api/v1/admin/get-webinar`)
       if (response.data.statusCode === 200) {
         setWebinarDetails(response.data.data)
         setLoading(false)
@@ -31,7 +33,7 @@ function WebinarPage() {
   async function registerWebinar() {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/register-for-webinar', registerInfo)
+      const response = await axios.post(`${backend}/api/v1/admin/register-for-webinar`, registerInfo)
       if (response.data.statusCode === 200) {
         alert("You are successfully resgistered for the webinar")
         setLoading(false)

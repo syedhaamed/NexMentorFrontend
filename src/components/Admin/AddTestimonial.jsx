@@ -3,10 +3,15 @@ import Header from './Header'
 import axios from 'axios';
 import Loading from '../utils/Loading';
 import { MdDelete } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function AddTestimonial() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [adminId, setAdminId] = useState('')
     const [testimonials, setTestimonials] = useState([])
     const [previewImage, setPreviewImage] = useState(null)
     const [selectedImage, setSelectedImage] = useState(null)
@@ -14,6 +19,7 @@ function AddTestimonial() {
         name: "",
         message: ''
     })
+    const navigate = useNavigate()
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -26,7 +32,7 @@ function AddTestimonial() {
     async function getTestimonials() {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/get-testimonial")
+            const response = await axios.post(`${backend}/api/v1/admin/get-testimonial`)
             if (response.data.statusCode === 200) {
                 setTestimonials(response.data.data)
                 setLoading(false)
@@ -40,7 +46,7 @@ function AddTestimonial() {
     async function removeTestimonials(id) {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/delete-testimonial", { id })
+            const response = await axios.post(`${backend}/api/v1/admin/delete-testimonial`, { id, adminId })
             if (response.data.statusCode === 200) {
                 getTestimonials()
                 setLoading(false)
@@ -57,10 +63,11 @@ function AddTestimonial() {
             const formData = new FormData()
             formData.append('name', testimonialDetails.name);
             formData.append('message', testimonialDetails.message);
+            formData.append('adminId', adminId);
 
             if (selectedImage) formData.append('image', selectedImage)
 
-            const response = await axios.post('/api/v1/admin/add-testimonial', formData, {
+            const response = await axios.post(`${backend}/api/v1/admin/add-testimonial`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -88,7 +95,20 @@ function AddTestimonial() {
     }
 
     useEffect(() => {
-        getTestimonials()
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const adminId = JSON.parse(localStorage.getItem("adminId"))
+        if (token && adminId) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === adminId) {
+                setAdminId(decodedToken.id)
+                getTestimonials()
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("adminId")
+            localStorage.removeItem("auth")
+        }
     }, [])
 
     return (

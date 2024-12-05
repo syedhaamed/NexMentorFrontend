@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import axios from 'axios';
 import Loading from '../utils/Loading';
+import { jwtDecode } from "jwt-decode";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Webinars() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [adminId, setAdminId] = useState('')
   const [previewImage, setPreviewImage] = useState(null)
   const [selectedImage, setSelectedImage] = useState(null)
   const [webinarDetails, setWebinarDetails] = useState({})
@@ -17,6 +22,7 @@ function Webinars() {
     year: '',
     content: ''
   })
+  const navigate = useNavigate()
 
   function handleStateChange() {
     setLocalSidebarState((prev) => !prev)
@@ -33,7 +39,7 @@ function Webinars() {
   async function getAdminDetails() {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/admin-details')
+      const response = await axios.post(`${backend}/api/v1/admin/admin-details`, { id: adminId })
       if (response.data.statusCode === 200) {
         setWebinarDetails(response.data.data.webinar)
         setLoading(false)
@@ -53,8 +59,9 @@ function Webinars() {
       formData.append('day', createWebinar.day);
       formData.append('year', createWebinar.year);
       formData.append('content', createWebinar.content);
+      formData.append('adminId', adminId);
       if (selectedImage) formData.append('image', selectedImage)
-      const response = await axios.post("/api/v1/admin/create-webinar", formData, {
+      const response = await axios.post(`${backend}/api/v1/admin/create-webinar`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -80,7 +87,7 @@ function Webinars() {
   async function deleteBlog() {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/remove-webinar')
+      const response = await axios.post(`${backend}/api/v1/admin/remove-webinar`, { adminId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         getAdminDetails()
@@ -93,7 +100,20 @@ function Webinars() {
 
 
   useEffect(() => {
-    getAdminDetails()
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const adminId = JSON.parse(localStorage.getItem("adminId"))
+    if (token && adminId) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === adminId) {
+        setAdminId(decodedToken.id)
+        getAdminDetails()
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("adminId")
+      localStorage.removeItem("auth")
+    }
   }, [])
 
 

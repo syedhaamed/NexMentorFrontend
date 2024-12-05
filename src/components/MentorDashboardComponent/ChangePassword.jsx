@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import TextField from '@mui/material/TextField';
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import ErrorPopup from '../utils/ErrorPopUp';
 import Loading from '../utils/Loading';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function ChangePassword() {
   const [passwords, setPasswords] = useState({
@@ -14,10 +16,12 @@ function ChangePassword() {
     confirmPassword: ""
   })
   const [loading, setLoading] = useState(false)
+  const [mentorId, setMentorId] = useState('')
   const [errorPopup, setErrorPopUp] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsgPopUp, setSuccessMsgPopUp] = useState(false)
   const [localSidebarState, setLocalSidebarState] = useState(false)
+  const navigate = useNavigate()
 
   function handleCloseErrorPopUp() {
     setErrorPopUp(false)
@@ -30,7 +34,7 @@ function ChangePassword() {
   async function changePassword() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/mentors/change-current-password", passwords)
+      const response = await axios.post(`${backend}/api/v1/mentors/change-current-password`, { ...passwords, mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         setSuccessMsgPopUp(true)
@@ -55,6 +59,24 @@ function ChangePassword() {
       })
     }
   }
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Mentor') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        setMentorId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
+  }, [])
 
   return (
     <>

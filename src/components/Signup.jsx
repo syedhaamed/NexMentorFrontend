@@ -19,6 +19,7 @@ import { setLoginParam } from './store/ParamsSlice';
 import Loading from './utils/Loading';
 import Slider from './utils/Slider';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Signup() {
   const [activeContainer, setActiveContainer] = useState('student')
@@ -81,7 +82,7 @@ function Signup() {
     } else {
       const userEmail = activeContainer === 'student' ? accountData.student.email : accountData.mentor.email;
       try {
-        await axios.post(`/api/v1/${activeContainer}s/delete-${activeContainer}`, { email: userEmail });
+        await axios.post(`${backend}/api/v1/${activeContainer}s/delete-${activeContainer}`, { email: userEmail });
       } catch (error) {
         console.error("Error while removing unverified user!", error);
       }
@@ -105,7 +106,7 @@ function Signup() {
 
   const verifyEmail = async () => {
     const accountData2 = activeContainer === 'student' ? accountData.student : accountData.mentor;
-    const url = `/api/v1/${activeContainer}s/create-account`;
+    const url = `${backend}/api/v1/${activeContainer}s/create-account`;
 
     try {
       setLoading(true);

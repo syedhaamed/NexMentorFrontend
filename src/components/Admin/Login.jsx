@@ -18,7 +18,8 @@ function AdminLogin() {
             setLoading(true)
             const response = await axios.post(`${backend}/api/v1/admin/login`, adminDetails)
             if (response.data.statusCode === 200) {
-                localStorage.setItem("adminId", JSON.stringify(response.data.data))
+                localStorage.setItem("adminId", JSON.stringify(response.data.data.userid))
+                localStorage.setItem("auth", JSON.stringify(response.data.data.token))
                 setLoading(false)
                 navigate("/admin-dashboard")
             }

@@ -3,16 +3,21 @@ import Header from './Header'
 import { IoSearch } from "react-icons/io5";
 import axios from 'axios';
 import Loading from '../utils/Loading';
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function PendingSessions() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [adminId, setAdminId] = useState('')
     const [pendingSessions, setPendingSessions] = useState([])
     const [originalPendingSessions, setOriginalPendingSessions] = useState([]);
     const [searchedMentor, setSearchedMentor] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
-
+    const navigate = useNavigate()
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = pendingSessions.slice(indexOfFirstItem, indexOfLastItem);
@@ -34,7 +39,7 @@ function PendingSessions() {
     async function fetchPendingSessions() {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/total-pending-sessions")
+            const response = await axios.post(`${backend}/api/v1/admin/total-pending-sessions`)
             if (response.data.statusCode === 200) {
                 const mentors = response.data.data;
                 const transformedSessions = [];
@@ -75,7 +80,7 @@ function PendingSessions() {
     async function removePendingSession(id) {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/remove-pending-session", { id })
+            const response = await axios.post(`${backend}/api/v1/admin/remove-pending-session`, { id, adminId })
             if (response.data.statusCode === 200) {
                 fetchPendingSessions()
                 setLoading(false)
@@ -104,7 +109,20 @@ function PendingSessions() {
     }
 
     useEffect(() => {
-        fetchPendingSessions()
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const adminId = JSON.parse(localStorage.getItem("adminId"))
+        if (token && adminId) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === adminId) {
+                setAdminId(decodedToken.id)
+                fetchPendingSessions()
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("adminId")
+            localStorage.removeItem("auth")
+        }
     }, [])
 
     return (
@@ -163,7 +181,7 @@ function PendingSessions() {
                                     <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
                                         {item?.purchasedDate.slice(0, 25)}
                                     </td>
-                                    <td onClick={()=> removePendingSession(item._id)} className="py-3 px-3 whitespace-nowrap text-sm text-center text-red-500 cursor-pointer md:hover:text-red-600 md:hover:underline md:underline-offset-2">
+                                    <td onClick={() => removePendingSession(item._id)} className="py-3 px-3 whitespace-nowrap text-sm text-center text-red-500 cursor-pointer md:hover:text-red-600 md:hover:underline md:underline-offset-2">
                                         Delete
                                     </td>
                                 </tr>

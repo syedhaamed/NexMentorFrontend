@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import ErrorPopup from './utils/ErrorPopUp';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function ResetLink() {
     const [passwords, setPasswords] = useState({
         password: '',
@@ -52,7 +54,7 @@ function ResetLink() {
         }
         try {
             setLoading(true)
-            const response = await axios.post(`/api/v1/mentors/reset-password/${token}`, passwords)
+            const response = await axios.post(`${backend}/api/v1/mentors/reset-password/${token}`, passwords)
             if (response.data.statusCode === 200) {
                 setLoading(false)
                 setDialogs(prev => ({ ...prev, passwordChanged: true }));

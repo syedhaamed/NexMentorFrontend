@@ -6,6 +6,8 @@ import ErrorPopup from '../utils/ErrorPopUp';
 import Loading from '../utils/Loading';
 import axios from 'axios';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function AdminChangePassword() {
 
   const [passwords, setPasswords] = useState({
@@ -30,7 +32,7 @@ function AdminChangePassword() {
   async function changePassword() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/change-password", passwords)
+      const response = await axios.post(`${backend}/api/v1/admin/change-password`, passwords)
       if (response.data.statusCode === 200) {
         setLoading(false)
         setSuccessMsgPopUp(true)

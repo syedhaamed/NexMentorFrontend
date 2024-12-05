@@ -5,12 +5,16 @@ import Loading from '../utils/Loading';
 import { IoClose } from "react-icons/io5";
 import TextField from '@mui/material/TextField';
 import { MdDelete } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function BlogPost() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [totalBlogs, setTotalBlogs] = useState([])
   const [loading, setLoading] = useState(false)
+  const [adminId, setAdminId] = useState('')
   const [container, setContainer] = useState('blogs')
   const [singleBlog, setSingleBlog] = useState({})
   const [previewImage, setPreviewImage] = useState(null)
@@ -21,7 +25,7 @@ function BlogPost() {
   })
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-
+  const navigate = useNavigate()
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = totalBlogs.slice(indexOfFirstItem, indexOfLastItem);
@@ -47,7 +51,7 @@ function BlogPost() {
   async function getBlogs() {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/get-blogs')
+      const response = await axios.post(`${backend}/api/v1/admin/get-blogs`)
 
       if (response.data.statusCode === 200) {
         setLoading(false)
@@ -66,8 +70,9 @@ function BlogPost() {
       const formData = new FormData()
       formData.append('title', addBlog.title)
       formData.append('content', addBlog.content)
+      formData.append('adminId', adminId)
       if (selectedImage) formData.append('image', selectedImage)
-      const response = await axios.post('/api/v1/admin/add-blog', formData)
+      const response = await axios.post(`${backend}/api/v1/admin/add-blog`, formData)
 
       if (response.data.statusCode === 200) {
         setLoading(false)
@@ -89,7 +94,7 @@ function BlogPost() {
   async function getSingleBlog(id) {
     try {
       setLoading(true)
-      const response = await axios.post(`/api/v1/admin/get-single-blog/${id}`)
+      const response = await axios.post(`${backend}/api/v1/admin/get-single-blog/${id}`)
       if (response.data.statusCode === 200) {
         setLoading(false)
         setSingleBlog(response.data.data)
@@ -105,7 +110,7 @@ function BlogPost() {
   async function deleteBlog(id) {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/remove-blog', { id })
+      const response = await axios.post(`${backend}/api/v1/admin/remove-blog`, { id, adminId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         getBlogs()
@@ -125,7 +130,20 @@ function BlogPost() {
   };
 
   useEffect(() => {
-    getBlogs()
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const adminId = JSON.parse(localStorage.getItem("adminId"))
+    if (token && adminId) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === adminId) {
+        setAdminId(decodedToken.id)
+        getBlogs()
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("adminId")
+      localStorage.removeItem("auth")
+    }
   }, [])
 
   return (
@@ -158,7 +176,7 @@ function BlogPost() {
                     </div>
                     <p className='flex justify-between items-center mt-3'>
                       <span onClick={() => getSingleBlog(blog._id)} className='text-blue-500 font-cg-times md:hover:text-blue-600 active:text-blue-600 cursor-pointer hover:underline active:underline underline-offset-2'>View</span>
-                      <MdDelete onClick={()=> deleteBlog(blog._id)} size={25} className='text-red-500 cursor-pointer md:hover:text-red-600 active:text-red-600' />
+                      <MdDelete onClick={() => deleteBlog(blog._id)} size={25} className='text-red-500 cursor-pointer md:hover:text-red-600 active:text-red-600' />
                     </p>
                   </div>
                 ))}

@@ -13,6 +13,8 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from 'react-router-dom';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 export default function VerifyEmailOTP({ open, handleClose, email, userType }) {
     const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
@@ -30,7 +32,7 @@ export default function VerifyEmailOTP({ open, handleClose, email, userType }) {
     async function handleResendOtp() {
         try {
             setLoading(true);
-            const endpoint = userType === 'mentor' ? "/api/v1/mentors/resend-otp" : "/api/v1/students/resend-otp";
+            const endpoint = userType === 'mentor' ? `${backend}/api/v1/mentors/resend-otp` : `${backend}/api/v1/students/resend-otp`;
             const response = await axios.post(endpoint, { id });
             if (response.status === 200) {
                 setLoading(false);
@@ -48,7 +50,7 @@ export default function VerifyEmailOTP({ open, handleClose, email, userType }) {
     const handleVerify = async () => {
         try {
             setLoading(true);
-            const endpoint = userType === 'mentor' ? "/api/v1/mentors/verify-email" : "/api/v1/students/verify-email";
+            const endpoint = userType === 'mentor' ? `${backend}/api/v1/mentors/verify-email` : `${backend}/api/v1/students/verify-email`;
             const response = await axios.post(endpoint, { email, otp });
             if (response.data.statusCode === 200) {
                 setLoading(false);

@@ -4,18 +4,24 @@ import { IoSearch } from "react-icons/io5";
 import axios from 'axios';
 import { MdOutlineDone } from "react-icons/md";
 import Loading from '../utils/Loading'
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function ApprovalSection() {
   const [sessionRequests, setSessionsRequests] = useState([])
   const [originalSessionRequests, setOriginalSessionRequests] = useState([]);
   const [searchStudent, setSearchStudent] = useState('')
   const [loading, setLoading] = useState(false)
+  const [mentorId, setMentorId] = useState('')
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalMentors: 0,
   });
+  const navigate = useNavigate()
 
   function handleStateChange() {
     setLocalSidebarState((prev) => !prev)
@@ -24,7 +30,7 @@ function ApprovalSection() {
   async function fetchSessionRequests(page = 1) {
     try {
       setLoading(true)
-      const response = await axios.post(`/api/v1/mentors/all-sessions-requests?page=${page}`)
+      const response = await axios.post(`${backend}/api/v1/mentors/all-sessions-requests?page=${page}`, { mentorId })
       if (response.data.statusCode === 200) {
         setSessionsRequests(response.data.data.data)
         setOriginalSessionRequests(response.data.data.data);
@@ -58,7 +64,7 @@ function ApprovalSection() {
   async function acceptSessionRequests(requestId, studentId) {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/mentors/accept-sessions-request", { requestId, studentId })
+      const response = await axios.post(`${backend}/api/v1/mentors/accept-sessions-request`, { requestId, studentId , mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         fetchSessionRequests();
@@ -98,6 +104,24 @@ function ApprovalSection() {
   useEffect(() => {
     fetchSessionRequests(pagination.currentPage)
   }, [pagination.currentPage])
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Mentor') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        setMentorId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
+  }, [])
 
 
   return (

@@ -4,20 +4,20 @@ import axios from 'axios';
 import { AiFillLinkedin } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
-
+const backend = import.meta.env.VITE_BACKEND_URL;
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function Authentication() {
     const navigate = useNavigate()
 
     const handleLoginRedirect = () => {
-        window.location.href = "http://localhost:8000/api/v1/students/auth/linkedin"; //change this later
+        window.location.href = `${backend}/api/v1/students/auth/linkedin`; //change this later
     };
 
     const handleLoginSuccess = async (response) => {
         const idToken = response.credential;
         try {
-            const res = await axios.post("/api/v1/students/google-auth", { idToken });
+            const res = await axios.post(`${backend}/api/v1/students/google-auth`, { idToken });
             if (res.data.statusCode === 200) {
                 localStorage.setItem("userType", JSON.stringify("Student"))
                 localStorage.setItem("userId", JSON.stringify(res.data.data._id))

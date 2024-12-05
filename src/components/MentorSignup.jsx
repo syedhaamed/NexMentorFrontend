@@ -9,6 +9,7 @@ import ErrorPopup from './utils/ErrorPopUp';
 import { useNavigate } from 'react-router-dom';
 import SideImage from './images/Mentorapplication.webp'
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function FileUpload({ label, onFileChange }) {
   const [fileName, setFileName] = useState('');
@@ -94,7 +95,7 @@ function MentorSignup() {
 
   async function onPayment() {
     try {
-      const response = await axios.post("/api/v1/mentors/create-order")
+      const response = await axios.post(`${backend}/api/v1/mentors/create-order`)
       const data = response.data.data
 
       const paymentObject = new window.Razorpay({
@@ -108,10 +109,10 @@ function MentorSignup() {
             signature: response.razorpay_signature,
             userId: id
           }
-          axios.post("/api/v1/mentors/verify-payment", option2)
+          axios.post(`${backend}/api/v1/mentors/verify-payment`, option2)
             .then((response) => {
               if (response.data.success === true) {
-                navigate("/signup/mentor-signup/mentor-signup-success")
+                navigate(`${backend}/signup/mentor-signup/mentor-signup-success`)
                 localStorage.removeItem("userId")
               } else {
                 setErrorMsg(error.response.data.message)
@@ -156,7 +157,7 @@ function MentorSignup() {
       if (neetScoreCard) formData.append('scoreCard', neetScoreCard);
       if (collegeId) formData.append('studentId', collegeId);
 
-      const response = await axios.post('/api/v1/mentors/fill-academic-details', formData, {
+      const response = await axios.post(`${backend}/api/v1/mentors/fill-academic-details`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -178,7 +179,7 @@ function MentorSignup() {
 
   async function getVerificationAmount() {
     try {
-      const response = await axios.post("/api/v1/admin/get-amount")
+      const response = await axios.post(`${backend}/api/v1/admin/get-amount`)
       if (response.data.statusCode === 200) {
         setAmount(response.data.data)
       }
@@ -186,24 +187,6 @@ function MentorSignup() {
       console.log("Error while getting verification amount:", error);
     }
   }
-
-
-  // useEffect(() => {
-  //   const loadScript = (src) => {
-  //     return new Promise((resolve) => {
-  //       const script = document.createElement('script');
-  //       script.src = src;
-  //       script.onload = () => {
-  //         resolve(true);
-  //       }
-  //       script.onerror = () => {
-  //         resolve(false);
-  //       }
-  //       document.body.appendChild(script);
-  //     })
-  //   }
-  //   loadScript('https://checkout.razorpay.com/v1/checkout.js')
-  // }, [])
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {

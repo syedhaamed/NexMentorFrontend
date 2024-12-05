@@ -6,21 +6,25 @@ import { useDispatch } from 'react-redux';
 import { setToggleSidebar } from '../store/SidebarSlice';
 import { IoClose } from "react-icons/io5";
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Header({ handleStateChange, getData }) {
     const [sideBar, setSideBar] = useState(false)
     const [userDetails, setUserDetails] = useState({})
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     function handleSidebar() {
         setSideBar((prevSideBar) => !prevSideBar);
         handleStateChange()
     }
 
-    async function fetchUser() {
+    async function fetchUser(id) {
         try {
-            const response = await axios.post("/api/v1/mentors/mentor-details")
+            const response = await axios.post(`${backend}/api/v1/mentors/mentor-details`, { id })
             if (response.data.statusCode === 200) {
                 setUserDetails(response.data.data)
                 if (getData) {
@@ -33,16 +37,27 @@ function Header({ handleStateChange, getData }) {
     }
 
     useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const userId = JSON.parse(localStorage.getItem("userId"))
         const user = JSON.parse(localStorage.getItem("userType"))
-        if (!user || user !== 'Mentor') {
-            navigate('/')
+        if (token && userId && user === 'Mentor') {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === userId) {
+                fetchUser(decodedToken.id)
+            }
         }
-        fetchUser()
+        else {
+            navigate('/')
+            localStorage.removeItem("userId")
+            localStorage.removeItem("auth")
+            localStorage.removeItem("userType")
+        }
     }, [])
 
     useEffect(() => {
         dispatch(setToggleSidebar(sideBar));
     }, [sideBar, dispatch]);
+    
     return (
         <div className='w-full h-auto flex justify-between items-center p-5 bg-white'>
             <div className='flex w-auto h-auto gap-2 items-center sm:gap-4'>

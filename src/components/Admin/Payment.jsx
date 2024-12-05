@@ -4,6 +4,10 @@ import { IoSearch } from "react-icons/io5";
 import axios from 'axios';
 import Loading from '../utils/Loading';
 import { MdOutlineDone } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Payment() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
@@ -14,9 +18,11 @@ function Payment() {
   const [currentPage, setCurrentPage] = useState(1);
   const [completePopUp, setCompletePopUp] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null);
+  const [adminId, setAdminId] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [mentorID, setMentorID] = useState('')
   const itemsPerPage = 15;
+  const navigate = useNavigate()
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -43,7 +49,7 @@ function Payment() {
   async function fetchPayoutStudents() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/total-mentors")
+      const response = await axios.post(`${backend}/api/v1/admin/total-mentors`)
       if (response.data.statusCode === 200) {
         const allMentors = response.data.data;
         const onlyMentorsWithWalletAmount = allMentors.filter((mentor) => mentor.wallet > 0);
@@ -82,8 +88,9 @@ function Payment() {
       const formData = new FormData();
       formData.append("imageOfProof", selectedImage);
       formData.append("mentorID", mentorID);
+      formData.append("adminId", adminId);
 
-      const response = await axios.post("/api/v1/admin/clear-payment", formData)
+      const response = await axios.post(`${backend}/api/v1/admin/clear-payment`, formData)
 
       if (response.data.statusCode === 200) {
         fetchPayoutStudents()
@@ -126,7 +133,20 @@ function Payment() {
 
 
   useEffect(() => {
-    fetchPayoutStudents()
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const adminId = JSON.parse(localStorage.getItem("adminId"))
+    if (token && adminId) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === adminId) {
+        setAdminId(decodedToken.id)
+        fetchPayoutStudents()
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("adminId")
+      localStorage.removeItem("auth")
+    }
   }, [])
 
   return (

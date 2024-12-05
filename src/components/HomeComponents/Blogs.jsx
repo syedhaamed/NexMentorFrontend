@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Blogs() {
     const [totalBlogs, setTotalBlogs] = useState([]);
@@ -9,7 +10,7 @@ function Blogs() {
     // Fetch blogs asynchronously
     async function getBlogs() {
         try {
-            const response = await axios.post('/api/v1/admin/get-blogs');
+            const response = await axios.post(`${backend}/api/v1/admin/get-blogs`);
             if (response.data.statusCode === 200) {
                 setTotalBlogs(response.data.data);
             }

@@ -10,7 +10,10 @@ import Loading from '../utils/Loading'
 import { IoWalletOutline } from "react-icons/io5";
 import { MdPendingActions } from "react-icons/md";
 import { StarRating } from '../utils/StarRating';
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function AdminDashboard() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
@@ -21,7 +24,7 @@ function AdminDashboard() {
     const [searchedMentor, setSearchedMentor] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-
+    const navigate = useNavigate()
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = completedSessions.slice(indexOfFirstItem, indexOfLastItem);
@@ -52,10 +55,10 @@ function AdminDashboard() {
         window.open(imageUrl, '_blank');
     };
 
-    async function fetchDashboardData() {
+    async function fetchDashboardData(adminId) {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/dashboard-data")
+            const response = await axios.post(`${backend}/api/v1/admin/dashboard-data`, { adminId })
             if (response.data.statusCode === 200) {
                 setDashboardData(response.data.data)
                 setLoading(false)
@@ -69,7 +72,7 @@ function AdminDashboard() {
     async function fetchCompletedSessions() {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/total-completed-sessions")
+            const response = await axios.post(`${backend}/api/v1/admin/total-completed-sessions`)
             if (response.data.statusCode === 200) {
                 const mentors = response.data.data;
                 const transformedSessions = [];
@@ -127,8 +130,20 @@ function AdminDashboard() {
     }, [searchedMentor, originalCompletedSessions]);
 
     useEffect(() => {
-        fetchDashboardData()
-        fetchCompletedSessions()
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const adminId = JSON.parse(localStorage.getItem("adminId"))
+        if (token && adminId) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === adminId) {
+                fetchDashboardData(decodedToken.id)
+                fetchCompletedSessions()
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("adminId")
+            localStorage.removeItem("auth")
+        }
     }, [])
 
     return (

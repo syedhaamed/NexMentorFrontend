@@ -3,6 +3,8 @@ import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import { StarRating } from '../utils/StarRating'
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function FeaturedMentors() {
     const [featuredMentors, setFeaturedMentors] = useState([])
     const [loading, setLoading] = useState(true)
@@ -23,7 +25,7 @@ function FeaturedMentors() {
     // Function to fetch featured mentors
     async function getFeaturedMentors() {
         try {
-            const response = await axios.post('/api/v1/admin/get-featured-mentors')
+            const response = await axios.post(`${backend}/api/v1/admin/get-featured-mentors`)
 
             if (response.data.statusCode === 200) {
                 setFeaturedMentors(response.data.data)

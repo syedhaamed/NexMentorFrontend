@@ -4,23 +4,27 @@ import { FaAngleUp } from "react-icons/fa6";
 import Loading from './utils/Loading';
 import axios from 'axios';
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function SessionManagement({ handleToChat }) {
     const [loading, setLoading] = useState(false)
     const [purchasedSessions, setPurchasedSessions] = useState([])
+    const [studentId, setStudentId] = useState('')
     const [dropdown, setDropDown] = useState('')
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
         totalSessions: 0,
     });
-
+    const navigate = useNavigate()
 
     async function fetchPurchasedSessions(page = 1) {
         try {
             setLoading(true)
-            const response = await axios.post(`/api/v1/students/purchased-sessions?page=${page}`)
+            const response = await axios.post(`${backend}/api/v1/students/purchased-sessions?page=${page}`, { userId: studentId })
             if (response.data.statusCode === 200) {
                 setPagination(response.data.data.pagination)
                 setPurchasedSessions(response.data.data.data)
@@ -54,6 +58,23 @@ function SessionManagement({ handleToChat }) {
         fetchPurchasedSessions(pagination.currentPage)
     }, [pagination.currentPage])
 
+    useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const userId = JSON.parse(localStorage.getItem("userId"))
+        const user = JSON.parse(localStorage.getItem("userType"))
+        if (token && userId && user === 'Student') {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === userId) {
+                setStudentId(decodedToken.id)
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("userId")
+            localStorage.removeItem("auth")
+            localStorage.removeItem("userType")
+        }
+    }, []);
 
     return (
         <>

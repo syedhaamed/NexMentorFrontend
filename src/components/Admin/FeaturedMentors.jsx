@@ -5,10 +5,14 @@ import { StarRating } from '../utils/StarRating';
 import Loading from '../utils/Loading';
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function FeaturedMentors() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [adminId, setAdminId] = useState('')
     const [featuredMentors, setFeaturedMentors] = useState([])
 
     const navigate = useNavigate()
@@ -24,7 +28,7 @@ function FeaturedMentors() {
     async function removeMentorFromFeatured(id) {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/remove-feature-mentor", { mentorId: id })
+            const response = await axios.post(`${backend}/api/v1/admin/remove-feature-mentor`, { mentorId: id, adminId })
             if (response.data.statusCode === 200) {
                 navigate(0)
                 setLoading(false)
@@ -34,6 +38,22 @@ function FeaturedMentors() {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const adminId = JSON.parse(localStorage.getItem("adminId"))
+        if (token && adminId) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === adminId) {
+                setAdminId(decodedToken.id)
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("adminId")
+            localStorage.removeItem("auth")
+        }
+    }, [])
 
     return (
         <>

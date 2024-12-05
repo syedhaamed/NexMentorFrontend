@@ -4,7 +4,10 @@ import { FaAngleUp } from "react-icons/fa6";
 import Loading from './utils/Loading';
 import axios from 'axios';
 import { MdOutlineFeedback } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 const StarRating = ({ onRating }) => {
   const [rating, setRating] = useState(0);
@@ -34,6 +37,7 @@ function CompletedSessions() {
   const [loading, setLoading] = useState(false)
   const [completedSessions, setCompletedSessions] = useState([])
   const [dropdown, setDropDown] = useState('')
+  const [studentId, setStudentId] = useState('')
   const [feedBackStatus, setFeedBackStatus] = useState(false)
   const [selectedRating, setSelectedRating] = useState(0);
   const [feedBackPopUp, setFeedBackPopUp] = useState(false)
@@ -43,11 +47,12 @@ function CompletedSessions() {
     totalPages: 1,
     totalSessions: 0,
   });
+  const navigate = useNavigate()
 
   async function fetchCompletedSessions(page = 1) {
     try {
       setLoading(true)
-      const response = await axios.post(`/api/v1/students/complete-sessions?page=${page}`)
+      const response = await axios.post(`${backend}/api/v1/students/complete-sessions?page=${page}`, { userId: studentId })
       if (response.data.statusCode === 200) {
         setPagination(response.data.data.pagination)
         setCompletedSessions(response.data.data.data)
@@ -79,7 +84,7 @@ function CompletedSessions() {
 
   async function handleFeedback(id) {
     try {
-      const response = await axios.post("/api/v1/students/is-feedback-given", { mentorId: id })
+      const response = await axios.post(`${backend}/api/v1/students/is-feedback-given`, { mentorId: id, studentId })
       console.log(response.data.data);
 
       setFeedBackStatus(response.data.data)
@@ -97,7 +102,7 @@ function CompletedSessions() {
   const submitFeedback = async () => {
     try {
       if (!feedBackStatus) {
-        const response = await axios.post("/api/v1/students/give-feedback", { mentorId: selectedMentorId, rating: selectedRating })
+        const response = await axios.post(`${backend}/api/v1/students/give-feedback`, { mentorId: selectedMentorId, rating: selectedRating, userId: studentId })
         console.log(response.data);
       }
       setSelectedMentorId('')
@@ -109,6 +114,24 @@ function CompletedSessions() {
       setFeedBackPopUp(false);
     }
   };
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Student') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        setStudentId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
+  }, [])
 
   return (
     <>

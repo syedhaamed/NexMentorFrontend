@@ -4,6 +4,8 @@ import { IoSearch } from "react-icons/io5";
 import axios from 'axios'
 import Loading from '../utils/Loading';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function MentorApproval() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -42,7 +44,7 @@ function MentorApproval() {
   async function fetchApprovalRequests() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/approval-requests")
+      const response = await axios.post(`${backend}/api/v1/admin/approval-requests`)
       if (response.data.statusCode === 200) {
         setApprovalRequests(response.data.data);
         setOriginalApprovalRequests(response.data.data)
@@ -57,7 +59,7 @@ function MentorApproval() {
   async function acceptApprovalRequest(mentorId) {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/accept-approval", { mentorId })
+      const response = await axios.post(`${backend}/api/v1/admin/accept-approval`, { mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         fetchApprovalRequests()
@@ -71,7 +73,7 @@ function MentorApproval() {
   async function removeApprovalRequest(mentorId) {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/remove-approval", { mentorId })
+      const response = await axios.post(`${backend}/api/v1/admin/remove-approval`, { mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         fetchApprovalRequests()

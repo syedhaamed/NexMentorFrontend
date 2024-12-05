@@ -6,6 +6,9 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ErrorPopup from './utils/ErrorPopUp';
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function FieldForPasswordChange({ passwords, setPasswords }) {
 
@@ -189,6 +192,7 @@ function FieldForUpdateProfile({ userDetails, setUserDetails, gender, setGender,
 
 function AccountInformation({ data }) {
     const [passwordChangePopUp, setPasswordChangePopUp] = useState(false)
+    const [studentId, setStudentId] = useState('')
     const [editProfilePopUp, setEditProfilePopUp] = useState(false)
     const [userDetails, setUserDetails] = useState({
         firstName: data.firstName,
@@ -226,7 +230,7 @@ function AccountInformation({ data }) {
     async function changePassword() {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/students/change-password", passwords)
+            const response = await axios.post(`${backend}/api/v1/students/change-password`, { ...passwords, studentId })
             if (response.data.statusCode === 200) {
                 setLoading(false)
                 setPasswordChangePopUp(false)
@@ -260,10 +264,11 @@ function AccountInformation({ data }) {
             formData.append('username', userDetails.username);
             formData.append('gender', gender);
             formData.append('currentClass', currentClass);
+            formData.append('studentId', studentId);
 
             if (image) formData.append('profilePicture', image)
 
-            const response = await axios.post("/api/v1/students/student-update-details", formData, {
+            const response = await axios.post(`${backend}/api/v1/students/student-update-details`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -295,6 +300,25 @@ function AccountInformation({ data }) {
             setCurrentClass(data.currentClass || '');
         }
     }, [data]);
+
+
+    useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const userId = JSON.parse(localStorage.getItem("userId"))
+        const user = JSON.parse(localStorage.getItem("userType"))
+        if (token && userId && user === 'Student') {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === userId) {
+                setStudentId(decodedToken.id)
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("userId")
+            localStorage.removeItem("auth")
+            localStorage.removeItem("userType")
+        }
+    }, []);
 
     return (
         <>

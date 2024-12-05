@@ -5,9 +5,14 @@ import { FormControl, Select, MenuItem } from '@mui/material';
 import axios from 'axios';
 import Loading from '../utils/Loading';
 import { IoCloseCircle } from "react-icons/io5";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function ProfileSetting() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
+  const [mentorId, setMentorId] = useState('')
   const [updateDetails, setUpdateDetails] = useState({
     firstName: '',
     lastName: '',
@@ -25,6 +30,7 @@ function ProfileSetting() {
   const [selectedImage, setSelectedImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const navigate = useNavigate()
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -129,6 +135,7 @@ function ProfileSetting() {
       formData.append('yearOfEducation', updateDetails.yearOfEducation);
       formData.append('gender', updateDetails.gender);
       formData.append('about', updateDetails.about);
+      formData.append('mentorId', mentorId);
 
       if (selectedLanguages.length > 0) {
         selectedLanguages.forEach(language => {
@@ -138,7 +145,7 @@ function ProfileSetting() {
 
       if (selectedImage) formData.append('profilePicture', selectedImage)
 
-      const response = await axios.post("/api/v1/mentors/mentor-update-details", formData, {
+      const response = await axios.post(`${backend}/api/v1/mentors/mentor-update-details`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -171,6 +178,24 @@ function ProfileSetting() {
   const removeLanguage = (language) => {
     setSelectedLanguages((prev) => prev.filter((lang) => lang !== language)); // Remove language
   };
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Mentor') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        setMentorId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
+  }, [])
 
   return (
     <>

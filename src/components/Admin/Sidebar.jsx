@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from '../images/loginSignupPageImages/logoSideImage.webp'
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { LuShoppingCart } from "react-icons/lu";
@@ -20,6 +20,9 @@ import { MdPendingActions } from "react-icons/md";
 import { RiUserStarFill } from "react-icons/ri";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { MdOutlineFeaturedVideo } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function LogoutDialog({ handleClose, handleLogout }) {
 
@@ -48,6 +51,7 @@ function LogoutDialog({ handleClose, handleLogout }) {
 function Sidebar() {
     const [logoutPopUp, setLogoutPopUp] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [adminId,setAdminId] = useState('')
 
     const sidebar = useSelector((state) => state.sidebarSlice.sidebar)
     const dispatch = useDispatch()
@@ -64,11 +68,12 @@ function Sidebar() {
     const handleLogout = async () => {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/admin-logout")
+            const response = await axios.post(`${backend}/api/v1/admin/admin-logout`,{adminId})
             if (response.data.statusCode === 200) {
                 setLogoutPopUp(false);
                 setLoading(false)
                 localStorage.removeItem("adminId")
+                localStorage.removeItem("auth")
                 navigate('/admin/login')
             }
         } catch (error) {
@@ -77,6 +82,21 @@ function Sidebar() {
         }
     };
 
+    useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const adminId = JSON.parse(localStorage.getItem("adminId"))
+        if (token && adminId) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === adminId) {
+                setAdminId(decodedToken.id)
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("adminId")
+            localStorage.removeItem("auth")
+        }
+    }, [])
 
     return (
         <>

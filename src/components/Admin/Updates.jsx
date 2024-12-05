@@ -3,18 +3,24 @@ import Header from './Header'
 import axios from 'axios';
 import Loading from '../utils/Loading';
 import { MdDelete } from "react-icons/md";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function AdminUpdates() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [loading, setLoading] = useState(false)
   const [adminDetails, setAdminDetails] = useState({})
   const [message, setMessage] = useState('')
+  const [adminId, setAdminId] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = adminDetails?.updates?.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(adminDetails?.updates?.length / itemsPerPage);
+  const navigate = useNavigate()
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
@@ -35,7 +41,7 @@ function AdminUpdates() {
   async function getUpdates() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/get-updates")
+      const response = await axios.post(`${backend}/api/v1/admin/get-updates`)
       if (response.data.statusCode === 200) {
         setAdminDetails(response.data.data[0])
         setLoading(false)
@@ -49,7 +55,7 @@ function AdminUpdates() {
   async function sendUpdates() {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/add-update', { message })
+      const response = await axios.post(`${backend}/api/v1/admin/add-update`, { message , adminId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         getUpdates()
@@ -77,7 +83,7 @@ function AdminUpdates() {
   async function deleteSingleUpdate(id) {
     try {
       setLoading(true)
-      const response = await axios.post('/api/v1/admin/delete-update', { id })
+      const response = await axios.post(`${backend}/api/v1/admin/delete-update`, { id , adminId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         getUpdates()
@@ -89,7 +95,20 @@ function AdminUpdates() {
   }
 
   useEffect(() => {
-    getUpdates()
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const adminId = JSON.parse(localStorage.getItem("adminId"))
+    if (token && adminId) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === adminId) {
+        setAdminId(decodedToken.id)
+        getUpdates()
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("adminId")
+      localStorage.removeItem("auth")
+    }
   }, [])
 
   return (

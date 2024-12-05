@@ -5,6 +5,7 @@ import { setToggleSidebar } from '../store/SidebarSlice';
 import { IoClose } from "react-icons/io5";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -19,9 +20,9 @@ function Header({ handleStateChange, getData }) {
         handleStateChange()
     }
 
-    async function fetchUser() {
+    async function fetchUser(id) {
         try {
-            const response = await axios.post(`${backend}/api/v1/admin/admin-details`)
+            const response = await axios.post(`${backend}/api/v1/admin/admin-details`, { id })
             if (response.data.statusCode === 200) {
                 setUserDetails(response.data.data)
                 if (getData) {
@@ -30,13 +31,23 @@ function Header({ handleStateChange, getData }) {
             }
         } catch (error) {
             console.log("Error while fetching user details", error);
-            navigate('/')
-            localStorage.removeItem("adminId")
         }
     }
 
     useEffect(() => {
-        fetchUser()
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const adminId = JSON.parse(localStorage.getItem("adminId"))
+        if (token && adminId) {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === adminId) {
+                fetchUser(decodedToken.id)
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("adminId")
+            localStorage.removeItem("auth")
+        }
     }, [])
 
     useEffect(() => {

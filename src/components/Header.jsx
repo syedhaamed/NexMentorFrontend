@@ -8,7 +8,9 @@ import { FaBarsStaggered } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useSelector } from 'react-redux';
+import { jwtDecode } from "jwt-decode";
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 // Debounce utility function to prevent excessive scrolling events
 const debounce = (func, delay) => {
@@ -24,8 +26,9 @@ function Header() {
   const [mentorDropdown, setMentorDropdown] = useState(false);
   const [resourcesDropdown, setResourcesDropdown] = useState(false);
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [studentId, setStudentId] = useState('')
   const [scroll, setScroll] = useState(0);
   const [notifcationsDropDown, setNotificationsDropDown] = useState(false)
   const [notifications, setNotifications] = useState([])
@@ -36,11 +39,12 @@ function Header() {
 
 
   // Fetch user details asynchronously
-  const fetchUser = async () => {
+  const fetchUser = async (id) => {
     try {
+      setLoading(true)
       const userType = JSON.parse(localStorage.getItem("userType"));
-      let url = userType === 'Student' ? "/api/v1/students/student-details" : userType === 'Mentor' ? "/api/v1/mentors/mentor-details" : "/api/v1/students/student-details";
-      const response = await axios.post(url);
+      let url = userType === 'Student' ? `${backend}/api/v1/students/student-details` : null;
+      const response = await axios.post(url, { id });
       setNotifications(response.data.data.notifications.reverse())
       setLoading(false);
       setUser(response.data.data);
@@ -59,7 +63,7 @@ function Header() {
 
   async function readNotifications() {
     try {
-      const response = await axios.post("/api/v1/students/read-notifications");
+      const response = await axios.post(`${backend}/api/v1/students/read-notifications`, { studentId });
     } catch (error) {
       console.log("Error while reading notifications", error);
     }
@@ -76,7 +80,22 @@ function Header() {
 
   // Initialize user data fetching on mount
   useEffect(() => {
-    fetchUser();
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Student') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        fetchUser(decodedToken.id)
+        setStudentId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
   }, [updateKey]);
 
   // Click outside event listener to close dropdown

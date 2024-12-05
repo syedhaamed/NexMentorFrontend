@@ -8,8 +8,11 @@ import Testimonial from './HomeComponents/Testimonials'
 import { useDispatch } from "react-redux";
 import { triggerHeaderUpdate } from "./store/HeaderSlice";
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function SingleMentor() {
   const [loading, setLoading] = useState(false)
+  const [studentId, setStudentId] = useState('')
   const [user, setUser] = useState({})
   const { id } = useParams()
   const [errorPopUp, setErrorPopUp] = useState(false)
@@ -21,7 +24,7 @@ function SingleMentor() {
   async function fetchMentorDetails() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/mentors/single-mentor", { mentorId: id })
+      const response = await axios.post(`${backend}/api/v1/mentors/single-mentor`, { mentorId: id })
       if (response.data.statusCode === 200) {
         setUser(response.data.data)
         setLoading(false)
@@ -36,7 +39,7 @@ function SingleMentor() {
 
   async function bookSession(id) {
     try {
-      const response = await axios.post("/api/v1/students/create-order", { packageId: id })
+      const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
       const data = response.data.data
 
       const paymentObject = new window.Razorpay({
@@ -48,9 +51,10 @@ function SingleMentor() {
             orderId: response.razorpay_order_id,
             paymentId: response.razorpay_payment_id,
             signature: response.razorpay_signature,
-            packageId: id
+            packageId: id,
+            studentId: studentId
           }
-          axios.post("/api/v1/students/verify-payment", option2)
+          axios.post(`${backend}/api/v1/students/verify-payment`, option2)
             .then((response) => {
               if (response.data.success === true) {
                 setLoading(true)
@@ -83,6 +87,15 @@ function SingleMentor() {
   }
 
   useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Student') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        setStudentId(decodedToken.id)
+      }
+    }
     fetchMentorDetails()
   }, [id])
 

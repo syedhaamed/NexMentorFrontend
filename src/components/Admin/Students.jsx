@@ -4,6 +4,8 @@ import { IoSearch } from "react-icons/io5";
 import axios from 'axios';
 import Loading from '../utils/Loading';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function Students() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [totalStudents, setTotalStudents] = useState([])
@@ -38,7 +40,7 @@ function Students() {
   async function fetchTotalStudents() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/total-students")
+      const response = await axios.post(`${backend}/api/v1/admin/total-students`)
       if (response.data.statusCode === 200) {
         setTotalStudents(response.data.data)
         setOriginalTotalStudents(response.data.data)

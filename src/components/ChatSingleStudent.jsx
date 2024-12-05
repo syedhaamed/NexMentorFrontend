@@ -6,14 +6,15 @@ import { FcGallery } from "react-icons/fc";
 import { IoMdSend } from "react-icons/io";
 import axios from 'axios';
 import Loading from './utils/Loading';
+import { jwtDecode } from "jwt-decode";
 
-
-const server = import.meta.env.VITE_SERVER
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function ChatSingle() {
     const [socket, setSocket] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const messageDivRef = useRef(null);
+    const [studentId, setStudentId] = useState('')
     const [loading, setLoading] = useState(false)
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
@@ -32,7 +33,7 @@ function ChatSingle() {
 
     async function handleSubmitMessage() {
         try {
-            const response = await axios.post(`/api/v1/message/send/${id}`, { message, participantType });
+            const response = await axios.post(`${backend}/api/v1/message/send/${id}`, { message, participantType, senderId: studentId });
             setMessage('');
             setMessages((prevMessages) => [...prevMessages, response.data.data]);
             setTimeout(() => {
@@ -47,9 +48,9 @@ function ChatSingle() {
         try {
             setLoading(true)
             const details = { searchedUserId: id };
-            const response = await axios.post('/api/v1/message/searched-user-details-mentors', details);
+            const response = await axios.post(`${backend}/api/v1/message/searched-user-details-mentors`, details);
             console.log(response.data.data);
-            
+
             const { mentorId, profilePicture } = response.data.data;
             setUserData({ mentorId, profilePicture });
             setLoading(false)
@@ -62,7 +63,7 @@ function ChatSingle() {
     async function fetchPreviousMessages() {
         try {
             setLoading(true)
-            const response = await axios.get(`/api/v1/message/${id}`);
+            const response = await axios.get(`${backend}/api/v1/message/${id}`, { senderId: studentId });
             setMessages(response.data.data);
             setLoading(false)
 
@@ -75,7 +76,7 @@ function ChatSingle() {
 
     async function messageRead() {
         try {
-            const response = await axios.post(`/api/v1/message/read-message/${id}`)
+            const response = await axios.post(`${backend}/api/v1/message/read-message/${id}`, { senderId: studentId })
         } catch (error) {
             console.log("Error while reading message", error);
         }
@@ -83,12 +84,27 @@ function ChatSingle() {
 
 
     useEffect(() => {
-        fetchUserDetails();
-        fetchPreviousMessages();
-        messageRead()
-        setTimeout(() => {
-            messageDivRef.current.scrollTop = messageDivRef.current.scrollHeight;
-        }, 300);
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const userId = JSON.parse(localStorage.getItem("userId"))
+        const user = JSON.parse(localStorage.getItem("userType"))
+        if (token && userId && user === 'Student') {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === userId) {
+                setStudentId(decodedToken.id)
+                fetchUserDetails();
+                fetchPreviousMessages();
+                messageRead()
+                setTimeout(() => {
+                    messageDivRef.current.scrollTop = messageDivRef.current.scrollHeight;
+                }, 300);
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("userId")
+            localStorage.removeItem("auth")
+            localStorage.removeItem("userType")
+        }
     }, [id]);
 
 

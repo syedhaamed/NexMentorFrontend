@@ -4,6 +4,8 @@ import { IoSearch } from "react-icons/io5";
 import axios from 'axios';
 import Loading from '../utils/Loading';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function ActiveSessions() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -38,7 +40,7 @@ function ActiveSessions() {
   async function fetchActiveSessions() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/total-active-sessions")
+      const response = await axios.post(`${backend}/api/v1/admin/total-active-sessions`)
       if (response.data.statusCode === 200) {
         const mentors = response.data.data;
         const transformedSessions = [];

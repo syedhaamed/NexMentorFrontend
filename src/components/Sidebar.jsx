@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from './images/loginSignupPageImages/logoSideImage.webp'
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { LuShoppingCart } from "react-icons/lu";
@@ -18,7 +18,9 @@ import Loading from './utils/Loading';
 import axios from 'axios';
 import { MdSystemSecurityUpdateWarning } from "react-icons/md";
 import { IoMdHelpCircleOutline } from "react-icons/io";
+import { jwtDecode } from "jwt-decode";
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function LogoutDialog({ handleClose, handleLogout }) {
 
@@ -47,6 +49,7 @@ function LogoutDialog({ handleClose, handleLogout }) {
 function Sidebar() {
     const [logoutPopUp, setLogoutPopUp] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [userId, setUserId] = useState('')
 
     const sidebar = useSelector((state) => state.sidebarSlice.sidebar)
     const dispatch = useDispatch()
@@ -62,7 +65,7 @@ function Sidebar() {
     const handleLogout = async () => {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/mentors/mentor-logout")
+            const response = await axios.post(`${backend}/api/v1/mentors/logout`, { id: userId })
             if (response.data.statusCode === 200) {
                 setLogoutPopUp(false);
                 setLoading(false)
@@ -75,6 +78,23 @@ function Sidebar() {
             setLoading(false)
         }
     };
+    useEffect(() => {
+        const token = JSON.parse(localStorage.getItem("auth"))
+        const userId = JSON.parse(localStorage.getItem("userId"))
+        const user = JSON.parse(localStorage.getItem("userType"))
+        if (token && userId && user === 'Mentor') {
+            const decodedToken = jwtDecode(token);
+            if (decodedToken.id === userId) {
+                setUserId(decodedToken.id)
+            }
+        }
+        else {
+            navigate('/')
+            localStorage.removeItem("userId")
+            localStorage.removeItem("auth")
+            localStorage.removeItem("userType")
+        }
+    }, [])
 
 
     return (

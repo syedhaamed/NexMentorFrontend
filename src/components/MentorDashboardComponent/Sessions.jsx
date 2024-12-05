@@ -5,12 +5,16 @@ import axios from 'axios'
 import { MdOutlineDone } from "react-icons/md";
 import Loading from '../utils/Loading';
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Sessions() {
   const [activeSessions, setActiveSessions] = useState([]);
   const [originalActiveSessions, setOriginalActiveSessions] = useState([]);
   const [searchStudent, setSearchStudent] = useState('')
+  const [mentorId, setMentorId] = useState('')
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [completePopUp, setCompletePopUp] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -25,6 +29,7 @@ function Sessions() {
     totalPages: 1,
     totalMentors: 0,
   });
+  const navigate = useNavigate()
 
   function handleStateChange() {
     setLocalSidebarState((prev) => !prev)
@@ -33,7 +38,7 @@ function Sessions() {
   async function fetchActiveSessions(page = 1) {
     try {
       setLoading(true)
-      const response = await axios.post(`/api/v1/mentors/all-active-sessions?page=${page}`)
+      const response = await axios.post(`${backend}/api/v1/mentors/all-active-sessions?page=${page}`, { mentorId })
       if (response.data.statusCode === 200) {
         setActiveSessions(response.data.data.data)
         setOriginalActiveSessions(response.data.data.data);
@@ -97,6 +102,7 @@ function Sessions() {
       formData.append("imageOfProof", selectedImage);
       formData.append("requestId", singleRequestData.requestId);
       formData.append("studentId", singleRequestData.studentId);
+      formData.append("mentorId", mentorId);
       const response = await axios.post("/api/v1/mentors/change-status-completed", formData)
       // console.log(response.data);
 
@@ -146,6 +152,24 @@ function Sessions() {
   useEffect(() => {
     fetchActiveSessions(pagination.currentPage)
   }, [pagination.currentPage])
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
+    const user = JSON.parse(localStorage.getItem("userType"))
+    if (token && userId && user === 'Mentor') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        setMentorId(decodedToken.id)
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
+  }, [])
 
   return (
     <>

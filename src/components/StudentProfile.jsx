@@ -13,6 +13,9 @@ import SessionManagement from './SessionManagement';
 import CompletedSessions from './CompletedSessions';
 import Chats from './Chats';
 import ChatSingle from './ChatSingleStudent';
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 
 function AllTabs({ options, data, handleToChat }) {
@@ -72,6 +75,7 @@ function StudentProfile() {
   const [options, setOptions] = useState('accountInformation')
   const [logoutPopUp, setLogoutPopUp] = useState(false)
   const [userDetails, setUserDetails] = useState({})
+  const [studentId, setStudentId] = useState('')
   const [loading, setLoading] = useState(false)
   const { id } = useParams()
 
@@ -84,12 +88,13 @@ function StudentProfile() {
   const handleLogout = async () => {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/students/logout")
+      const response = await axios.post(`${backend}/api/v1/students/logout`, { studentId })
       if (response.data.statusCode === 200) {
         setLogoutPopUp(false);
         setLoading(false)
         localStorage.removeItem("userId")
         localStorage.removeItem("userType")
+        localStorage.removeItem("auth")
         navigate('/login')
       }
     } catch (error) {
@@ -98,13 +103,13 @@ function StudentProfile() {
     }
   };
 
-  async function fetchUserDetails() {
+  async function fetchUserDetails(id) {
     try {
       try {
         setLoading(true)
         const userType = JSON.parse(localStorage.getItem("userType"));
-        let url = userType === 'Student' ? "/api/v1/students/student-details" : userType === 'Mentor' ? "/api/v1/mentors/mentor-details" : "/api/v1/students/student-details";
-        const response = await axios.post(url);
+        let url = userType === 'Student' ? `${backend}/api/v1/students/student-details` : null;
+        const response = await axios.post(url, { id });
         setUserDetails(response.data.data);
         setLoading(false)
       } catch (error) {
@@ -123,11 +128,22 @@ function StudentProfile() {
   }
 
   useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const userId = JSON.parse(localStorage.getItem("userId"))
     const user = JSON.parse(localStorage.getItem("userType"))
-    if (!user || user !== 'Student') {
-      navigate('/')
+    if (token && userId && user === 'Student') {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === userId) {
+        fetchUserDetails(decodedToken.id)
+        setStudentId(decodedToken.id)
+      }
     }
-    fetchUserDetails()
+    else {
+      navigate('/')
+      localStorage.removeItem("userId")
+      localStorage.removeItem("auth")
+      localStorage.removeItem("userType")
+    }
   }, [])
 
   return (

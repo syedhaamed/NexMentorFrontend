@@ -10,6 +10,8 @@ import Faq from './HomeComponents/Faq'
 import axios from 'axios';
 import Loading from './utils/Loading';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function ContactPage() {
     const [loading, setLoading] = useState(false)
     const [userDetails, setUserDetails] = useState({
@@ -21,7 +23,7 @@ function ContactPage() {
     async function contactUs() {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/admin/contacted-us", userDetails)
+            const response = await axios.post(`${backend}/api/v1/admin/contacted-us`, userDetails)
             if (response.data.statusCode === 200) {
                 alert("Your message has been sent successfully")
                 setUserDetails({

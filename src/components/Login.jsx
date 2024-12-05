@@ -10,6 +10,7 @@ import { setLoginParam } from './store/ParamsSlice';
 import Loading from './utils/Loading';
 import Slider from './utils/Slider';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Login() {
   const [activeContainer, setActiveContainer] = useState('student');
@@ -45,11 +46,13 @@ function Login() {
       setLoading(false);
       if (activeContainer === "student") {
         localStorage.setItem("userType", JSON.stringify("Student"))
-        localStorage.setItem("userId", JSON.stringify(response.data.data))
+        localStorage.setItem("userId", JSON.stringify(response.data.data.studentId))
+        localStorage.setItem("auth", JSON.stringify(response.data.data.token))
         navigate('/search-mentor');
       } else {
         localStorage.setItem("userType", JSON.stringify("Mentor"))
-        localStorage.setItem("userId", JSON.stringify(response.data.data))
+        localStorage.setItem("userId", JSON.stringify(response.data.data.mentorId))
+        localStorage.setItem("auth", JSON.stringify(response.data.data.token))
         navigate('/mentor-dashboard')
       }
       setLoginDetails({ email: '', password: '' });
@@ -62,8 +65,8 @@ function Login() {
     }
   }
 
-  const loginStudent = () => loginUser("/api/v1/students/login");
-  const loginMentor = () => loginUser("/api/v1/mentors/login");
+  const loginStudent = () => loginUser(`${backend}/api/v1/students/login`);
+  const loginMentor = () => loginUser(`${backend}/api/v1/mentors/login`);
 
   useEffect(() => {
     if (loginParam.length > 1) {

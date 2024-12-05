@@ -8,6 +8,8 @@ import { NavLink } from 'react-router-dom';
 import ErrorPopup from './utils/ErrorPopUp';
 import { StarRating } from './utils/StarRating';
 
+const backend = import.meta.env.VITE_BACKEND_URL;
+
 function DualRangeSlider({ min, max, step2, onRangeChange }) {
     const [minValue, setMinValue] = useState(min);
     const [maxValue, setMaxValue] = useState(max);
@@ -165,7 +167,7 @@ function SearchMentor() {
     async function fetchUsers(page = 1) {
         try {
             setLoading(true)
-            const response = await axios.get(`/api/v1/mentors/all-mentors?page=${page}`, formDetails)
+            const response = await axios.get(`${backend}/api/v1/mentors/all-mentors?page=${page}`, formDetails)
             if (response.data.statusCode === 200) {
                 setUser(response.data.data.data)
                 setPagination(response.data.data.pagination)
@@ -186,7 +188,7 @@ function SearchMentor() {
     async function searchMentor() {
         try {
             setLoading(true)
-            const response = await axios.post("/api/v1/mentors/search-mentor", formDetails)
+            const response = await axios.post(`${backend}/api/v1/mentors/search-mentor`, formDetails)
             if (response.data.statusCode === 200) {
                 setUser(response.data.data)
                 setLoading(false)

@@ -6,6 +6,9 @@ import { StarRating } from '../utils/StarRating';
 import Loading from '../utils/Loading';
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Mentors() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
@@ -13,6 +16,7 @@ function Mentors() {
   const [totalMentors, setTotalMentors] = useState([])
   const [originalTotalMentors, setOriginalTotalMentors] = useState([]);
   const [searchedMentor, setSearchedMentor] = useState('')
+  const [adminId, setAdminId] = useState('')
   const [featuredMentors, setFeaturedMentors] = useState()
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
@@ -40,7 +44,7 @@ function Mentors() {
   async function fetchTotalMentors() {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/total-mentors")
+      const response = await axios.post(`${backend}/api/v1/admin/total-mentors`)
       if (response.data.statusCode === 200) {
         setTotalMentors(response.data.data)
         setOriginalTotalMentors(response.data.data)
@@ -55,7 +59,7 @@ function Mentors() {
   async function featureSingleMentor(id) {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/feature-mentor", { mentorId: id })
+      const response = await axios.post(`${backend}/api/v1/admin/feature-mentor`, { mentorId: id, adminId })
       if (response.data.statusCode === 200) {
         navigate(0)
         setLoading(false)
@@ -73,7 +77,7 @@ function Mentors() {
   async function toggleStatus(mentorId) {
     try {
       setLoading(true)
-      const response = await axios.post("/api/v1/admin/toggle-status", { mentorId })
+      const response = await axios.post(`${backend}/api/v1/admin/toggle-status`, { mentorId })
       if (response.data.statusCode === 200) {
         fetchTotalMentors()
         setLoading(false)
@@ -112,7 +116,20 @@ function Mentors() {
   }, [searchedMentor, originalTotalMentors]);
 
   useEffect(() => {
-    fetchTotalMentors()
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const adminId = JSON.parse(localStorage.getItem("adminId"))
+    if (token && adminId) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === adminId) {
+        setAdminId(decodedToken.id)
+        fetchTotalMentors()
+      }
+    }
+    else {
+      navigate('/')
+      localStorage.removeItem("adminId")
+      localStorage.removeItem("auth")
+    }
   }, [])
 
   return (
