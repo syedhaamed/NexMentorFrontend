@@ -22,8 +22,7 @@ function AboutUs() {
                     <p className='text-sm sm:text-sm md:text-base lg:text-lg my-3'> Unlike traditional coaching programs, <span className='font-bold'>NexMentor</span> focuses on mentorship that builds confidence, clarity, and resilience in students. Our mission is to ensure no student feels lost or overwhelmed on their path to success</p>
                     <p className='text-sm sm:text-sm md:text-base lg:text-lg my-3'> With <span className='font-bold'>NexMentor</span>, students gain more than academic guidance—they gain a partner deeply invested in their journey. Our mentors are more than subject experts; they are inspiring role models who understand the dedication and effort required to succeed in NEET</p>
                     <h1 className='text-xl xl:text-2xl font-bold my-5'>Join Us Today!</h1>
-                    <p className='text-sm sm:text-sm md:text-base lg:text-lg my-3'> We are committed to fostering an inclusive environment where every student feels valued and empowered to achieve their best. Take the first step toward your NEET success by joining <span className='font-bold'>NexMentor</span> today!</p>
-                    <p className='text-sm sm:text-sm md:text-base lg:text-lg my-6 font-bold'>NexMentor: Your Mentor. Your Guide. Your Path to NEET Success</p>
+                    <p className='text-sm sm:text-sm md:text-base lg:text-lg my-3 mb-8'> We are committed to fostering an inclusive environment where every student feels valued and empowered to achieve their best. Take the first step toward your NEET success by joining <span className='font-bold'>NexMentor</span> today!</p>
                 </div>
             </div>
         </div>

@@ -37,11 +37,11 @@ function HowItWorks() {
                     <ul className='text-sm sm:text-sm md:text-base lg:text-lg list-disc list-inside my-3'>
                         <li>The mentor will review and approve your session request within 24 hours.</li>
                         <li>Once approved, the status will change to active, and you’ll be notified via email and within the platform.</li>
-                        <li>An in-built chat system will activate, allowing you and the mentor to communicate directly and discuss the most suitable date and me for the session based on both of your availabilities.</li>
+                        <li>An in-built chat system will activate, allowing you and the mentor to communicate directly and discuss the most suitable date and time for the session based on both of your availabilities.</li>
                     </ul>
                     <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold mt-4'>5. Scheduling the Session</h1>
                     <ul className='text-sm sm:text-sm md:text-base lg:text-lg list-disc list-inside my-3'>
-                        <li>Use the chat system to finalize a convenient date and me for your session.</li>
+                        <li>Use the chat system to finalize a convenient date and time for your session.</li>
                         <li>The mentor will share a <span className='font-bold'>Google Meet link</span> or any other agreed-upon video conferencing link prior to the session.</li>
                     </ul>
                     <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold mt-4'>6. Attend the Session</h1>

@@ -51,7 +51,7 @@ function FileUpload({ label, onFileChange }) {
 
 function MentorSignup() {
   const [year, setYear] = useState('');
-  const [amount,setAmount] = useState('')
+  const [amount, setAmount] = useState('')
   const [gender, setGender] = useState('');
   const [neetAttempt, setNeetAttempt] = useState('');
   const [neetScoreCard, setNeetScoreCard] = useState(null);
@@ -99,7 +99,7 @@ function MentorSignup() {
       const data = response.data.data
 
       const paymentObject = new window.Razorpay({
-        key: "rzp_test_ZkEAtdmouhqkw4",
+        key: "rzp_live_b0TsznPSQSsjx8",
         order_id: data.id,
         ...data,
         handler: function (response) {
@@ -112,7 +112,7 @@ function MentorSignup() {
           axios.post(`${backend}/api/v1/mentors/verify-payment`, option2)
             .then((response) => {
               if (response.data.success === true) {
-                navigate(`${backend}/signup/mentor-signup/mentor-signup-success`)
+                navigate('/signup/mentor-signup/mentor-signup-success')
                 localStorage.removeItem("userId")
               } else {
                 setErrorMsg(error.response.data.message)
@@ -131,7 +131,6 @@ function MentorSignup() {
       setLoading(false)
       setErrorMsg(error.response.data.message)
       setErrorPopUp(true)
-      resetForm()
     }
   }
 
@@ -173,7 +172,6 @@ function MentorSignup() {
       setLoading(false)
       setErrorMsg(error.response.data.message)
       setErrorPopUp(true)
-      resetForm()
     }
   }
 

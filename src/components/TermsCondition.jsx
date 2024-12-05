@@ -28,7 +28,7 @@ function TermsCondition() {
                     <ul className='text-sm sm:text-sm md:text-base lg:text-lg list-disc list-inside my-3'>
                         <li>Payment for mentorship sessions must be completed in full prior to booking confirmation.</li>
                         <li>Fees are non-refundable, except in cases specifically outlined by NexMentor’s policies.</li>
-                        <li><span className='font-bold'>NexMentor</span> reserves the right to modify pricing structures at any me, with prior notification to users.</li>
+                        <li><span className='font-bold'>NexMentor</span> reserves the right to modify pricing structures at any time, with prior notification to users.</li>
                     </ul>
                     <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold mt-4'>4. User Responsibilities</h1>
                     <ul className='text-sm sm:text-sm md:text-base lg:text-lg list-disc list-inside my-3'>
@@ -75,8 +75,8 @@ function TermsCondition() {
                     </ul>
                     <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold mt-4'>12. Dispute Resolution</h1>
                     <ul className='text-sm sm:text-sm md:text-base lg:text-lg list-disc list-inside my-3'>
-                        <li>Any disputes arising under these Terms shall first be subject to good-faith discussions. If unresolved within 30 days, the dispute will proceed to mediation in Jammu and Kashmir, India, in accordance with the guidelines set by the Jammu and Kashmir State Legal Services Authority (JKSLSA). The mediation will be conducted in English and will aim for resolution within 60 days from the start of the media on process. The cost of media on shall be shared equally between the parties unless otherwise agreed.</li>
-                        <li>If media on fails to resolve the dispute, it shall be submitted to binding arbitration under the Arbitration and Conciliation Act, 1996, conducted in English in Jammu and Kashmir, India. The arbitration decision shall be final and binding, with each party bearing its own costs unless the prevailing party is entitled to recover reasonable legal fees and expenses.</li>
+                        <li>Any disputes arising under these Terms shall first be subject to good-faith discussions. If unresolved within 30 days, the dispute will proceed to mediation in Jammu and Kashmir, India, in accordance with the guidelines set by the Jammu and Kashmir State Legal Services Authority (JKSLSA). The mediation will be conducted in English and will aim for resolution within 60 days from the start of the mediation process. The cost of mediation shall be shared equally between the parties unless otherwise agreed.</li>
+                        <li>If mediation fails to resolve the dispute, it shall be submitted to binding arbitration under the Arbitration and Conciliation Act, 1996, conducted in English in Jammu and Kashmir, India. The arbitration decision shall be final and binding, with each party bearing its own costs unless the prevailing party is entitled to recover reasonable legal fees and expenses.</li>
                     </ul>
                     <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold mt-4'>13. Severability</h1>
                     <ul className='text-sm sm:text-sm md:text-base lg:text-lg list-disc list-inside my-3'>

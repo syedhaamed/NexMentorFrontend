@@ -33,6 +33,8 @@ function FeaturedAd() {
         try {
             setLoading(true)
             const response = await axios.post(`${backend}/api/v1/admin/admin-details`, { id: adminId })
+            console.log(response);
+            
             if (response.data.statusCode === 200) {
                 setPreviewImage(response.data.data.featuredAd)
                 setSettedVerificationAmount(response.data.data.verificationAmount)

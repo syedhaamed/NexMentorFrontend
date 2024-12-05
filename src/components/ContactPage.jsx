@@ -9,6 +9,7 @@ import Testimonials from './HomeComponents/Testimonials'
 import Faq from './HomeComponents/Faq'
 import axios from 'axios';
 import Loading from './utils/Loading';
+import { NavLink } from 'react-router-dom';
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -41,9 +42,9 @@ function ContactPage() {
 
     return (
         <>
-        {
-            loading && <Loading />
-        }
+            {
+                loading && <Loading />
+            }
             <div className='w-full h-auto flex flex-col'>
                 <div className='w-full h-auto flex flex-col font-cg-times px-5 my-5'>
                     <h1 className='text-center text-xs md:text-sm xl:text-base'>Get in Touch with Us</h1>
@@ -76,22 +77,22 @@ function ContactPage() {
                         <div className='w-full h-auto flex flex-col gap-3 xl:gap-6'>
                             <div className='w-full h-auto flex gap-2 text-white'>
                                 <MdEmail size={20} />
-                                <p className='text-sm xl:text-base'>info@nexmentor.com</p>
+                                <p className='text-sm xl:text-base'>support@nexmentor.com</p>
                             </div>
                             <div className='w-full h-auto flex gap-2 text-white'>
                                 <FaPhoneAlt size={20} />
-                                <p className='text-sm xl:text-base'>+91 1234567890</p>
+                                <p className='text-sm xl:text-base'>+91 91039 02768</p>
                             </div>
                         </div>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Open hours</p>
                         <p className='text-sm text-white xl:text-base'>24/7</p>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Location</p>
-                        <p className='text-sm text-white xl:text-base'>Lorem Ipsum Dolor SIt Amet123 Main Street, Suite 111, Cityville, ST 12341</p>
+                        <p className='text-sm text-white xl:text-base'>NEXMENTOR HQ Baramulla, Jammu & Kashmir, India</p>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Follow us</p>
                         <div className='w-full h-auto flex items-center gap-4 text-white'>
-                            <FaInstagram size={25} />
+                            <NavLink to='https://www.instagram.com/nexmentor.in/?utm_source=ig_web_button_share_sheet' target='_blank'><FaInstagram size={25} /></NavLink>
                             <MdFacebook size={25} />
-                            <FaLinkedin size={25} />
+                            <NavLink to='https://www.linkedin.com/company/nexmentor' target='_blank'><FaLinkedin size={25} /></NavLink>
                             <FaXTwitter size={25} />
                         </div>
                     </div>

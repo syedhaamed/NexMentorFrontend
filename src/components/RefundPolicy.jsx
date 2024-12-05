@@ -31,7 +31,7 @@ function RefundPolicy() {
                     <p className='text-sm sm:text-sm md:text-base lg:text-lg my-3'>If a mentor becomes unavailable after approving a session but before the scheduled date, the admin will assist the student in selecting a new mentor of their choice to reschedule the session. No refund will be issued unless the student opts not to proceed with a replacement mentor.</p>
                     <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold mt-4'>5. Cancellation Process</h1>
                     <ul className='text-sm sm:text-sm md:text-base lg:text-lg list-disc list-inside my-3'>
-                        <li>Students must email their cancella on requests to <a href="mailto:" ><span className='text-blue-500 underline'>support@nexmentor.com</span></a> with the subject line: “Session Cancellation Request.”</li>
+                        <li>Students must email their cancellation requests to <a href="mailto:" ><span className='text-blue-500 underline'>support@nexmentor.com</span></a> with the subject line: “Session Cancellation Request.”</li>
                         <li>Include session details such as booking ID, mentor name, and session date to facilitate prompt processing.</li>
                         <li>Refunds will be processed within 7-10 business days from the date of refund approval.</li>
                     </ul>
@@ -50,8 +50,8 @@ function RefundPolicy() {
                         <li>Refunds (where applicable) will be processed within 7-10 business days from the date of refund approval.</li>
                         <li>Refunds will be credited back to the original payment method used for the transaction, unless otherwise specified.</li>
                         <li>Force Majeure Clause: NexMentor will not be liable for refunds or cancellations due to events beyond reasonable control, such as natural disasters, power outages, or other unforeseen circumstances.</li>
-                        <li>NexMentor reserves the right to amend this refund policy at any me. Significant updates will be communicated via email and reflected on this page.</li>
-                        <li>Dispute Resolutioon: Any disputes related to refunds or cancellations will be managed through mediation or arbitration as determined by NexMentor.</li>
+                        <li>NexMentor reserves the right to amend this refund policy at any time. Significant updates will be communicated via email and reflected on this page.</li>
+                        <li>Dispute Resolution: Any disputes related to refunds or cancellations will be managed through mediation or arbitration as determined by NexMentor.</li>
                     </ul>
                     <p className='text-sm sm:text-sm md:text-base lg:text-lg my-3'> For further inquiries or support, please contact us at <a href="mailto:" ><span className='text-blue-500 underline'>support@nexmentor.com</span></a></p>
                 </div>
