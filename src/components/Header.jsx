@@ -91,7 +91,6 @@ function Header() {
       }
     }
     else {
-      navigate('/')
       localStorage.removeItem("userId")
       localStorage.removeItem("auth")
       localStorage.removeItem("userType")

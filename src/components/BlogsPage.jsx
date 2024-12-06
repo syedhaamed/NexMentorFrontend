@@ -10,6 +10,16 @@ const backend = import.meta.env.VITE_BACKEND_URL;
 function BlogsPage() {
     const [totalBlogs, setTotalBlogs] = useState([])
     const [loading, setLoading] = useState(false)
+    const [gmail, setGmail] = useState('')
+
+    async function subscribe() {
+        try {
+            const response = await axios.post(`${backend}/api/v1/admin/subscribe-newsletter`, { gmail })
+            setGmail('')
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async function getBlogs() {
         try {
@@ -45,8 +55,8 @@ function BlogsPage() {
                         </div>
                         <p className='text-sm md:mt-5 md:text-base xl:text-lg text-[#595959]'>Navigate your NEET preparation with expert advice, practical tips, and motivational success stories. Our blog is packed with insights from mentors and top scorers to help you stay on track and reach your goals. Empower yourself with proven strategies and boost your confidence for exam day!</p>
                         <div className='w-full h-auto flex mt-4 items-center'>
-                            <input type="text" placeholder='Subscribe to our Newsletter' className='border-2 border-[#287EFF] rounded-l-lg px-3 py-2 md:w-60 xl:w-80 xl:py-3 outline-none' />
-                            <span className='px-3 bg-[#287EFF] text-white border-2 border-l-0 border-[#287EFF] py-2 rounded-r-lg xl:py-3 md:px-4 xl:px-5 cursor-pointer md:hover:bg-[#2069d5]'>Subsribe</span>
+                            <input type="text" placeholder='Subscribe to our Newsletter' value={gmail} onChange={(e) => setGmail(e.target.value)} className='border-2 border-[#287EFF] rounded-l-lg px-3 py-2 md:w-60 xl:w-80 xl:py-3 outline-none' />
+                            <span onClick={subscribe} className='px-3 bg-[#287EFF] text-white border-2 border-l-0 border-[#287EFF] py-2 rounded-r-lg xl:py-3 md:px-4 xl:px-5 cursor-pointer md:hover:bg-[#2069d5]'>Subsribe</span>
                         </div>
                     </div>
                     <div className='w-full h-[400px] relative md:w-[50%] xl:w-[40%]'>

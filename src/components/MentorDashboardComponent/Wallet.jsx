@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import { LuIndianRupee } from "react-icons/lu";
 import axios from 'axios'

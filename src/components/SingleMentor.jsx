@@ -7,6 +7,7 @@ import { StarRating } from './utils/StarRating'
 import Testimonial from './HomeComponents/Testimonials'
 import { useDispatch } from "react-redux";
 import { triggerHeaderUpdate } from "./store/HeaderSlice";
+import { jwtDecode } from "jwt-decode"
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -43,7 +44,7 @@ function SingleMentor() {
       const data = response.data.data
 
       const paymentObject = new window.Razorpay({
-        key: "rzp_test_ZkEAtdmouhqkw4",
+        key: "rzp_live_b0TsznPSQSsjx8",
         order_id: data.id,
         ...data,
         handler: function (response) {

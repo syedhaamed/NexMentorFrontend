@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaInstagram } from "react-icons/fa";
 import { MdFacebook } from "react-icons/md";
 import { FaLinkedin } from "react-icons/fa";
@@ -7,8 +7,23 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import { CiMail } from "react-icons/ci";
+import axios from 'axios'
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Footer() {
+  const [gmail, setGmail] = useState('')
+
+  async function subscribe() {
+    try {
+      const response = await axios.post(`${backend}/api/v1/admin/subscribe-newsletter`, { gmail })
+      setGmail('')
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   return (
     <div className='w-full h-auto pt-10 flex flex-col bg-[#0092DB] font-cg-times'>
       <div className='w-full h-auto flex flex-col gap-5 sm:flex-row'>
@@ -17,8 +32,8 @@ function Footer() {
           <p className='text-center sm:text-lg md:text-xl lg:text-2xl md:tracking-wider'>Sign up our newsletter</p>
         </div>
         <div className='w-full h-auto flex justify-center items-center sm:justify-start'>
-          <input type="text" placeholder='Enter your Email' className='w-[50%] p-2 outline-none' />
-          <button className='text-white bg-black p-2 px-4'>Subscribe</button>
+          <input type="text" placeholder='Enter your Email' value={gmail} onChange={(e) => setGmail(e.target.value)} className='w-[50%] p-2 outline-none' />
+          <button onClick={subscribe} className='text-white bg-black p-2 px-4'>Subscribe</button>
         </div>
       </div>
       <div className='w-full h-auto flex flex-col mt-4 gap-6 sm:gap-8 md:flex-row sm:mt-10 md:px-6 lg:mt-20'>

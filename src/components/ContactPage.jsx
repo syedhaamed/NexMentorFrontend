@@ -4,7 +4,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { MdFacebook } from "react-icons/md";
 import { FaLinkedin } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaYoutube } from "react-icons/fa";
 import Testimonials from './HomeComponents/Testimonials'
 import Faq from './HomeComponents/Faq'
 import axios from 'axios';
@@ -93,7 +93,7 @@ function ContactPage() {
                             <NavLink to='https://www.instagram.com/nexmentor.in/?utm_source=ig_web_button_share_sheet' target='_blank'><FaInstagram size={25} /></NavLink>
                             <MdFacebook size={25} />
                             <NavLink to='https://www.linkedin.com/company/nexmentor' target='_blank'><FaLinkedin size={25} /></NavLink>
-                            <FaXTwitter size={25} />
+                            <FaYoutube size={25} />
                         </div>
                     </div>
                 </div>
