@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import TextField from '@mui/material/TextField';
-import { NavLink } from 'react-router-dom'
 import ErrorPopup from '../utils/ErrorPopUp';
 import Loading from '../utils/Loading';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -16,6 +16,7 @@ function AdminChangePassword() {
     confirmPassword: ""
   })
   const [loading, setLoading] = useState(false)
+  const [adminId, setAdminId] = useState('')
   const [errorPopup, setErrorPopUp] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsgPopUp, setSuccessMsgPopUp] = useState(false)
@@ -32,7 +33,7 @@ function AdminChangePassword() {
   async function changePassword() {
     try {
       setLoading(true)
-      const response = await axios.post(`${backend}/api/v1/admin/change-password`, passwords)
+      const response = await axios.post(`${backend}/api/v1/admin/change-password`, { ...passwords, adminId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         setSuccessMsgPopUp(true)
@@ -57,6 +58,17 @@ function AdminChangePassword() {
       })
     }
   }
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"))
+    const adminId = JSON.parse(localStorage.getItem("adminId"))
+    if (token && adminId) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.id === adminId) {
+        setAdminId(decodedToken.id)
+      }
+    }
+  }, [])
 
   return (
     <>
