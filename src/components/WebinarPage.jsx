@@ -69,8 +69,8 @@ function WebinarPage() {
                   <FaCalendarAlt size={30} className='mr-2 text-blue-500' />
                   <span>{webinarDetails?.time},</span>
                   <span>{webinarDetails?.date}</span>
-                  <span>{webinarDetails?.day},</span>
-                  <span>{webinarDetails?.year}</span>
+                  <span>{webinarDetails?.year},</span>
+                  <span>{webinarDetails?.day}</span>
                 </div>
                 <div style={{ whiteSpace: "pre-wrap" }} dangerouslySetInnerHTML={{ __html: webinarDetails.content }} className='w-full h-auto font-cg-times text-sm md:text-base xl:text-lg'>
                 </div>

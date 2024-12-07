@@ -125,6 +125,27 @@ function PendingSessions() {
         }
     }, [])
 
+    function formatDateToIST(date) {
+        // Convert the date to IST (Indian Standard Time)
+        const optionsDate = {
+            day: 'numeric',   // Day as numeric (e.g., '7')
+            month: 'short',    // Abbreviated month (e.g., 'Dec')
+            year: 'numeric',   // Full year (e.g., '2024')
+        };
+
+        const optionsTime = {
+            hour: '2-digit',   // Hour in 2 digits (e.g., '05')
+            minute: '2-digit', // Minute in 2 digits (e.g., '40')
+            hour12: true,      // 12-hour format (e.g., '5:40 PM')
+        };
+
+        // Format the date and time separately for IST
+        const formattedDate = new Date(date).toLocaleDateString('en-IN', optionsDate);
+        const formattedTime = new Date(date).toLocaleTimeString('en-IN', optionsTime);
+
+        return `${formattedDate} ${formattedTime}`;
+    }
+
     return (
         <>
             {
@@ -179,7 +200,7 @@ function PendingSessions() {
                                         {item?.package}
                                     </td>
                                     <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
-                                        {item?.purchasedDate.slice(0, 25)}
+                                        {formatDateToIST(item?.purchasedDate)}
                                     </td>
                                     <td onClick={() => removePendingSession(item._id)} className="py-3 px-3 whitespace-nowrap text-sm text-center text-red-500 cursor-pointer md:hover:text-red-600 md:hover:underline md:underline-offset-2">
                                         Delete

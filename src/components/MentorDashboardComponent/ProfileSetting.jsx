@@ -115,8 +115,16 @@ function ProfileSetting() {
     "Sanskrit",
     "Sindhi",
     "Tamil",
-    "Telugu"
+    "Telugu",
+    "Urdu",
+    "Haryanvi",
+    "Rajasthani",
+    "Santali",
+    "Bodo",
+    "Dogri",
+    "Konkani"
   ];
+
 
   function handleStateChange() {
     setLocalSidebarState((prev) => !prev)
