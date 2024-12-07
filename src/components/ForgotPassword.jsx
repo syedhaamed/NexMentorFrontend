@@ -30,7 +30,7 @@ function ForgotPassword() {
     const sendResetLink = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await axios.post(`${backend}/api/v1/mentors/forgot-password`, { email });
+            const response = await axios.post(`${backend}/api/v1/students/forgot-password`, { email });
             setLoading(false);
             if (response.data.statusCode === 200) {
                 setLinkSendPopUp(true);
