@@ -49,7 +49,7 @@ function CompletedSessions() {
   });
   const navigate = useNavigate()
 
-  async function fetchCompletedSessions(page = 1) {
+  async function fetchCompletedSessions(page = 1, studentId) {
     try {
       setLoading(true)
       const response = await axios.post(`${backend}/api/v1/students/complete-sessions?page=${page}`, { userId: studentId })
@@ -85,8 +85,6 @@ function CompletedSessions() {
   async function handleFeedback(id) {
     try {
       const response = await axios.post(`${backend}/api/v1/students/is-feedback-given`, { mentorId: id, studentId })
-      console.log(response.data.data);
-
       setFeedBackStatus(response.data.data)
       setFeedBackPopUp(true)
       setSelectedMentorId(id)
@@ -94,10 +92,6 @@ function CompletedSessions() {
       console.log("error while fetching data about student Feedback", error);
     }
   }
-
-  useEffect(() => {
-    fetchCompletedSessions(pagination.currentPage)
-  }, [pagination.currentPage])
 
   const submitFeedback = async () => {
     try {
@@ -123,6 +117,7 @@ function CompletedSessions() {
       const decodedToken = jwtDecode(token);
       if (decodedToken.id === userId) {
         setStudentId(decodedToken.id)
+        fetchCompletedSessions(pagination.currentPage, decodedToken.id)
       }
     }
     else {
@@ -131,7 +126,7 @@ function CompletedSessions() {
       localStorage.removeItem("auth")
       localStorage.removeItem("userType")
     }
-  }, [])
+  }, [pagination.currentPage])
 
   return (
     <>

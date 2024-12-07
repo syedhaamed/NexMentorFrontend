@@ -12,7 +12,6 @@ const backend = import.meta.env.VITE_BACKEND_URL;
 function SessionManagement({ handleToChat }) {
     const [loading, setLoading] = useState(false)
     const [purchasedSessions, setPurchasedSessions] = useState([])
-    const [studentId, setStudentId] = useState('')
     const [dropdown, setDropDown] = useState('')
     const [pagination, setPagination] = useState({
         currentPage: 1,
@@ -21,7 +20,7 @@ function SessionManagement({ handleToChat }) {
     });
     const navigate = useNavigate()
 
-    async function fetchPurchasedSessions(page = 1) {
+    async function fetchPurchasedSessions(page = 1, studentId) {
         try {
             setLoading(true)
             const response = await axios.post(`${backend}/api/v1/students/purchased-sessions?page=${page}`, { userId: studentId })
@@ -54,9 +53,6 @@ function SessionManagement({ handleToChat }) {
         }
     };
 
-    useEffect(() => {
-        fetchPurchasedSessions(pagination.currentPage)
-    }, [pagination.currentPage])
 
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem("auth"))
@@ -65,7 +61,7 @@ function SessionManagement({ handleToChat }) {
         if (token && userId && user === 'Student') {
             const decodedToken = jwtDecode(token);
             if (decodedToken.id === userId) {
-                setStudentId(decodedToken.id)
+                fetchPurchasedSessions(pagination.currentPage, decodedToken.id)
             }
         }
         else {
@@ -74,7 +70,7 @@ function SessionManagement({ handleToChat }) {
             localStorage.removeItem("auth")
             localStorage.removeItem("userType")
         }
-    }, []);
+    }, [pagination.currentPage]);
 
     return (
         <>

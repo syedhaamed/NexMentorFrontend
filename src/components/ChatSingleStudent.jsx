@@ -8,7 +8,7 @@ import axios from 'axios';
 import Loading from './utils/Loading';
 import { jwtDecode } from "jwt-decode";
 
-const backend = import.meta.env.VITE_BACKEND_URL;
+const server = import.meta.env.VITE_BACKEND_URL;
 
 function ChatSingle() {
     const [socket, setSocket] = useState(null);
@@ -33,7 +33,7 @@ function ChatSingle() {
 
     async function handleSubmitMessage() {
         try {
-            const response = await axios.post(`${backend}/api/v1/message/send/${id}`, { message, participantType, senderId: studentId });
+            const response = await axios.post(`${server}/api/v1/message/send/${id}`, { message, participantType, senderId: studentId });
             setMessage('');
             setMessages((prevMessages) => [...prevMessages, response.data.data]);
             setTimeout(() => {
@@ -48,9 +48,7 @@ function ChatSingle() {
         try {
             setLoading(true)
             const details = { searchedUserId: id };
-            const response = await axios.post(`${backend}/api/v1/message/searched-user-details-mentors`, details);
-            console.log(response.data.data);
-
+            const response = await axios.post(`${server}/api/v1/message/searched-user-details-mentors`, details);
             const { mentorId, profilePicture } = response.data.data;
             setUserData({ mentorId, profilePicture });
             setLoading(false)
@@ -60,10 +58,12 @@ function ChatSingle() {
         }
     }
 
-    async function fetchPreviousMessages() {
+    async function fetchPreviousMessages(studentID) {
         try {
             setLoading(true)
-            const response = await axios.get(`${backend}/api/v1/message/${id}`, { senderId: studentId });
+            const response = await axios.get(`${server}/api/v1/message/${id}`, {
+                params: { senderId: studentID },
+            });
             setMessages(response.data.data);
             setLoading(false)
 
@@ -74,9 +74,9 @@ function ChatSingle() {
         }
     }
 
-    async function messageRead() {
+    async function messageRead(studentID) {
         try {
-            const response = await axios.post(`${backend}/api/v1/message/read-message/${id}`, { senderId: studentId })
+            const response = await axios.post(`${server}/api/v1/message/read-message/${id}`, { senderId: studentID })
         } catch (error) {
             console.log("Error while reading message", error);
         }
@@ -92,8 +92,8 @@ function ChatSingle() {
             if (decodedToken.id === userId) {
                 setStudentId(decodedToken.id)
                 fetchUserDetails();
-                fetchPreviousMessages();
-                messageRead()
+                fetchPreviousMessages(decodedToken.id);
+                messageRead(decodedToken.id)
                 setTimeout(() => {
                     messageDivRef.current.scrollTop = messageDivRef.current.scrollHeight;
                 }, 300);

@@ -35,7 +35,7 @@ function Sessions() {
     setLocalSidebarState((prev) => !prev)
   }
 
-  async function fetchActiveSessions(page = 1) {
+  async function fetchActiveSessions(page = 1, mentorId) {
     try {
       setLoading(true)
       const response = await axios.post(`${backend}/api/v1/mentors/all-active-sessions?page=${page}`, { mentorId })
@@ -103,11 +103,11 @@ function Sessions() {
       formData.append("requestId", singleRequestData.requestId);
       formData.append("studentId", singleRequestData.studentId);
       formData.append("mentorId", mentorId);
-      const response = await axios.post("/api/v1/mentors/change-status-completed", formData)
+      const response = await axios.post(`${backend}/api/v1/mentors/change-status-completed`, formData)
       // console.log(response.data);
 
       if (response.data.statusCode === 200) {
-        fetchActiveSessions()
+        fetchActiveSessions(mentorId)
         setCompletePopUp(false)
         setSelectedImage(null)
         setLoading(false)
@@ -149,9 +149,6 @@ function Sessions() {
     }
   }, [searchStudent, originalActiveSessions]);
 
-  useEffect(() => {
-    fetchActiveSessions(pagination.currentPage)
-  }, [pagination.currentPage])
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("auth"))
@@ -161,6 +158,7 @@ function Sessions() {
       const decodedToken = jwtDecode(token);
       if (decodedToken.id === userId) {
         setMentorId(decodedToken.id)
+        fetchActiveSessions(pagination.currentPage, decodedToken.id)
       }
     }
     else {
@@ -169,7 +167,7 @@ function Sessions() {
       localStorage.removeItem("auth")
       localStorage.removeItem("userType")
     }
-  }, [])
+  }, [pagination.currentPage])
 
   return (
     <>

@@ -27,7 +27,7 @@ function ApprovalSection() {
     setLocalSidebarState((prev) => !prev)
   }
 
-  async function fetchSessionRequests(page = 1) {
+  async function fetchSessionRequests(page = 1, mentorId) {
     try {
       setLoading(true)
       const response = await axios.post(`${backend}/api/v1/mentors/all-sessions-requests?page=${page}`, { mentorId })
@@ -64,7 +64,7 @@ function ApprovalSection() {
   async function acceptSessionRequests(requestId, studentId) {
     try {
       setLoading(true)
-      const response = await axios.post(`${backend}/api/v1/mentors/accept-sessions-request`, { requestId, studentId , mentorId })
+      const response = await axios.post(`${backend}/api/v1/mentors/accept-sessions-request`, { requestId, studentId, mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
         fetchSessionRequests();
@@ -102,10 +102,6 @@ function ApprovalSection() {
 
 
   useEffect(() => {
-    fetchSessionRequests(pagination.currentPage)
-  }, [pagination.currentPage])
-
-  useEffect(() => {
     const token = JSON.parse(localStorage.getItem("auth"))
     const userId = JSON.parse(localStorage.getItem("userId"))
     const user = JSON.parse(localStorage.getItem("userType"))
@@ -113,6 +109,7 @@ function ApprovalSection() {
       const decodedToken = jwtDecode(token);
       if (decodedToken.id === userId) {
         setMentorId(decodedToken.id)
+        fetchSessionRequests(pagination.currentPage, decodedToken.id)
       }
     }
     else {
@@ -121,7 +118,7 @@ function ApprovalSection() {
       localStorage.removeItem("auth")
       localStorage.removeItem("userType")
     }
-  }, [])
+  }, [pagination.currentPage])
 
 
   return (

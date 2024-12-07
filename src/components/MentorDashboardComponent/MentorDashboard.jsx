@@ -17,7 +17,6 @@ function MentorDashboard() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [userData, setUserData] = useState({})
     const [loading, setLoading] = useState(false)
-    const [mentorId, setMentorId] = useState('')
     const [searchStudent, setSearchStudent] = useState('')
     const [completedSessions, setCompletedSessions] = useState([])
     const [originalCompletedSessions, setOriginalCompletedSessions] = useState([]);
@@ -40,7 +39,7 @@ function MentorDashboard() {
         setUserData(data)
     }
 
-    async function fetchCompletedSession(page = 1) {
+    async function fetchCompletedSession(page = 1, mentorId) {
         try {
             setLoading(true)
             const response = await axios.post(`${backend}/api/v1/mentors/all-complete-sessions?page=${page}`, { mentorId })
@@ -103,9 +102,6 @@ function MentorDashboard() {
         }
     }, [searchStudent, originalCompletedSessions]);
 
-    useEffect(() => {
-        fetchCompletedSession(pagination.currentPage)
-    }, [pagination.currentPage])
 
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem("auth"))
@@ -114,7 +110,7 @@ function MentorDashboard() {
         if (token && userId && user === 'Mentor') {
             const decodedToken = jwtDecode(token);
             if (decodedToken.id === userId) {
-                setMentorId(decodedToken.id)
+                fetchCompletedSession(pagination.currentPage, decodedToken.id)
             }
         }
         else {
@@ -123,7 +119,7 @@ function MentorDashboard() {
             localStorage.removeItem("auth")
             localStorage.removeItem("userType")
         }
-    }, [])
+    }, [pagination.currentPage])
 
     return (
         <>
