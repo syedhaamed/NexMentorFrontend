@@ -20,7 +20,8 @@ function Authentication() {
             const res = await axios.post(`${backend}/api/v1/students/google-auth`, { idToken });
             if (res.data.statusCode === 200) {
                 localStorage.setItem("userType", JSON.stringify("Student"))
-                localStorage.setItem("userId", JSON.stringify(res.data.data._id))
+                localStorage.setItem("userId", JSON.stringify(res.data.data.id))
+                localStorage.setItem("auth", JSON.stringify(res.data.data.token))
                 navigate('/search-mentor');
             }
         } catch (error) {
