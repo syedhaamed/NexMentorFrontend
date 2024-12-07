@@ -197,7 +197,7 @@ function Payment() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentItems.map((item, index) => (
+              {currentItems?.map((item, index) => (
                 <tr key={index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
                     {index + 1}
@@ -209,16 +209,16 @@ function Payment() {
                     {item?.email}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
-                    {item?.paymentDetails.paymentMethod}
+                    {item?.paymentDetails?.paymentMethod}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
-                    {item?.paymentDetails.paymentMethod === 'Bank' ? item?.paymentDetails.accountHolderName : '--'}
+                    {item?.paymentDetails?.paymentMethod === 'Bank' ? item?.paymentDetails?.accountHolderName : '--'}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
-                    {item?.paymentDetails.paymentMethod === 'Bank' ? item?.paymentDetails.ifscCode : '--'}
+                    {item?.paymentDetails?.paymentMethod === 'Bank' ? item?.paymentDetails?.ifscCode : '--'}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
-                    {item?.paymentDetails.paymentInfo}
+                    {item?.paymentDetails?.paymentInfo}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
                     ₹{item?.wallet}
