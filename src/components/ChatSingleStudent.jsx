@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import io from "socket.io-client";
 import { BsArrowRight } from "react-icons/bs";
-import { FcGallery } from "react-icons/fc";
 import { IoMdSend } from "react-icons/io";
 import axios from 'axios';
 import Loading from './utils/Loading';
@@ -182,9 +181,6 @@ function ChatSingle() {
 
                 <div className='w-full p-4'>
                     <div className='w-[90%] h-12 border-[1px] border-black rounded-3xl mx-auto flex p-2 shadow-xl'>
-                        <div className='p-1.5 rounded-full bg-gray-200 flex items-center cursor-pointer'>
-                            <FcGallery size={20} />
-                        </div>
                         <div className='flex-1 px-3'>
                             <input
                                 type="text"

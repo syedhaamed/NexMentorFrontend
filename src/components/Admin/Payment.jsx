@@ -93,11 +93,11 @@ function Payment() {
       const response = await axios.post(`${backend}/api/v1/admin/clear-payment`, formData)
 
       if (response.data.statusCode === 200) {
-        fetchPayoutStudents()
         setCompletePopUp(false)
         setSelectedImage(null)
         setLoading(false)
         setMentorID('')
+        fetchPayoutStudents()
       }
     } catch (error) {
       console.log("error while Clearing payment", error);

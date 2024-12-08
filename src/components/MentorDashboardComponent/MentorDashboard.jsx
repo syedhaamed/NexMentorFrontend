@@ -145,7 +145,7 @@ function MentorDashboard() {
                             </div>
                             <div className='w-[230px] h-auto rounded-3xl p-3 px-5 flex flex-col font-nunito border-[1px] border-[#D3CBFB] xl:w-[280px]'>
                                 <div className='w-full h-auto flex justify-between items-center gap-4'>
-                                    <span className='text-xl text-[#797D8C] xl:text-2xl'>Total Sessions</span>
+                                    <span className='text-xl text-[#797D8C] xl:text-2xl'>Completed Sessions</span>
                                     <LuShoppingCart size={20} className='xl:size-7' />
                                 </div>
                                 <span className='text-4xl font-semibold xl:mt-4 xl:text-5xl'>{userData?.completeSessions?.length}</span>

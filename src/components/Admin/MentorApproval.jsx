@@ -3,6 +3,7 @@ import Header from './Header'
 import { IoSearch } from "react-icons/io5";
 import axios from 'axios'
 import Loading from '../utils/Loading';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -10,6 +11,9 @@ function MentorApproval() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [loading, setLoading] = useState(false)
   const [approvalRequests, setApprovalRequests] = useState([])
+  const [selectedMentorId, setSelectedMentorId] = useState('')
+  const [rejectPopUp, setRejectPopUp] = useState(false)
+  const [approvePopUp, setApprovePopUp] = useState(false)
   const [originalApprovalRequests, setOriginalApprovalRequests] = useState([]);
   const [searchedMentor, setSearchedMentor] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,12 +60,33 @@ function MentorApproval() {
     }
   }
 
+  function handleReject(id) {
+    setRejectPopUp(true)
+    setSelectedMentorId(id)
+  }
+
+  function handleRejectClose() {
+    setRejectPopUp(false)
+    setSelectedMentorId('')
+  }
+
+  function handleApprove(id) {
+    setApprovePopUp(true)
+    setSelectedMentorId(id)
+  }
+
+  function handleApproveClose() {
+    setApprovePopUp(false)
+    setSelectedMentorId('')
+  }
+
   async function acceptApprovalRequest(mentorId) {
     try {
       setLoading(true)
       const response = await axios.post(`${backend}/api/v1/admin/accept-approval`, { mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
+        setApprovePopUp(false)
         fetchApprovalRequests()
       }
     } catch (error) {
@@ -76,6 +101,7 @@ function MentorApproval() {
       const response = await axios.post(`${backend}/api/v1/admin/remove-approval`, { mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
+        setRejectPopUp(false)
         fetchApprovalRequests()
       }
     } catch (error) {
@@ -224,8 +250,8 @@ function MentorApproval() {
                     {convertToIST(item?.createdAt)}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
-                    <span onClick={() => acceptApprovalRequest(item._id)} className='text-blue-500 mr-4 active:text-blue-600 md:hover:text-blue-600 cursor-pointer active:underline md:hover:underline'>Approve</span>
-                    <span onClick={() => removeApprovalRequest(item._id)} className='text-red-500 active:text-red-600 md:hover:text-red-600 cursor-pointer active:underline md:hover:underline'>Reject</span>
+                    <span onClick={() => handleApprove(item._id)} className='text-blue-500 mr-4 active:text-blue-600 md:hover:text-blue-600 cursor-pointer active:underline md:hover:underline'>Approve</span>
+                    <span onClick={() => handleReject(item._id)} className='text-red-500 active:text-red-600 md:hover:text-red-600 cursor-pointer active:underline md:hover:underline'>Reject</span>
                   </td>
                 </tr>
               ))}
@@ -260,6 +286,38 @@ function MentorApproval() {
               </div>
             )
           }
+          <Dialog open={rejectPopUp} onClose={handleRejectClose}>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogContent>
+              <Typography>
+                Are you sure you want to Reject This Approval request?
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleRejectClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={() => acceptApprovalRequest(selectedMentorId)} color="error">
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={approvePopUp} onClose={handleApproveClose}>
+            <DialogTitle>Accepting Mentor Request</DialogTitle>
+            <DialogContent>
+              <Typography>
+                Are you sure you want to Accept This Approval request?
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleApproveClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={() => removeApprovalRequest(selectedMentorId)} color="error">
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
     </>

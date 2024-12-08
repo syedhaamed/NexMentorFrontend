@@ -137,7 +137,7 @@ function Sidebar() {
                         </NavLink>
                         <NavLink onClick={handleSidebar} to='/admin-dashboard/payment' className={({ isActive }) => `${isActive ? 'shadow-custom-blue bg-[#0092DB]' : 'bg-inherit shadow-none'} text-xl w-[280px] px-8 py-3 rounded-2xl flex justify-start items-center gap-3 lg:px-4 lg:text-base lg:mx-0 active:bg-[#0092DB] active:shadow-custom-blue lg:hover:shadow-custom-blue cursor-pointer lg:hover:bg-[#0092DB]`}>
                             <TbCashBanknote size={25} />
-                            Payment
+                            Wallet
                         </NavLink>
                         <NavLink onClick={handleSidebar} to='/admin-dashboard/cleared-payment' className={({ isActive }) => `${isActive ? 'shadow-custom-blue bg-[#0092DB]' : 'bg-inherit shadow-none'} text-xl w-[280px] px-8 py-3 rounded-2xl flex justify-start items-center gap-3 lg:px-4 lg:text-base lg:mx-0 active:bg-[#0092DB] active:shadow-custom-blue lg:hover:shadow-custom-blue cursor-pointer lg:hover:bg-[#0092DB]`}>
                             <TbCashBanknote size={25} />

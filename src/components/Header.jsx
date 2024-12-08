@@ -64,6 +64,7 @@ function Header() {
   async function readNotifications() {
     try {
       const response = await axios.post(`${backend}/api/v1/students/read-notifications`, { studentId });
+      fetchUser(studentId)
     } catch (error) {
       console.log("Error while reading notifications", error);
     }
@@ -189,7 +190,14 @@ function Header() {
           {
             user && user.username && user.username.length
               ? <div className="w-auto h-auto flex justify-between items-center gap-5 lg:gap-6 flex-shrink-0">
-                <IoMdNotificationsOutline onClick={handleNotifications} size={20} className='text-[#0092DB] sm:size-7 cursor-pointer' />
+                <span className='w-8 h-8 flex justify-center items-center relative cursor-pointer'>
+                  <IoMdNotificationsOutline onClick={handleNotifications} size={20} className='text-[#0092DB] sm:size-7 cursor-pointer' />
+                  {
+                    notifications[notifications.length - 1]?.isRead
+                      ? null
+                      : <span className='w-1.5 h-1.5 absolute top-1.5 right-2 bg-red-500 rounded-full'></span>
+                  }
+                </span>
                 {
                   notifcationsDropDown && (
                     <div className='disable-scrollbar w-80 h-auto min-h-[70vh] max-h-96 overflow-y-scroll p-5 border shadow-custom absolute top-14 rounded-lg right-3 bg-gray-100 sm:top-16 lg:top-20 z-50'>

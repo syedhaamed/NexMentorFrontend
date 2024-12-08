@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 function TermsCondition() {
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
     return (
         <div className='w-full h-auto flex flex-col'>
             <div className='w-full h-auto flex flex-col font-cg-times px-5 my-5'>

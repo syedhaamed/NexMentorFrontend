@@ -79,6 +79,9 @@ function SessionManagement({ handleToChat }) {
             }
             <div className='w-full h-auto flex flex-col gap-3 md:w-[60vw] lg:w-[80vw]'>
                 <h1 className='font-cg-times text-2xl font-semibold'>Session Management</h1>
+                <div className='w-full h-auto flex gap-2 my-2 items-center text-xs lg:text-base'>
+                    <p><span className='font-semibold'>Note : </span> When your session status changes from 'Pending' to 'Active' after mentor Approval, use the chat to coordinate with your mentor, finalize the session timing, and receive the Google Meet Link for your session.</p>
+                </div>
                 <div className='w-full h-auto min-h-80 max-h-[100vh] flex flex-col justify-between bg-gray-100 pb-3 gap-3 font-cg-times rounded-md sm:text-base md:text-lg lg:text-xl 2xl:h-[93vh]'>
                     <div className='disable-scrollbar w-full h-auto overflow-y-scroll'>
                         <div className='flex bg-[#9EDFFF63] font-cg-times justify-between p-2 text-xs border-b border-gray-300 rounded-t-md lg:text-base'>

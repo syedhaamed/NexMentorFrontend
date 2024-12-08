@@ -1,17 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './Header'
+import axios from 'axios'
+
+const backend = import.meta.env.VITE_BACKEND_URL;
 
 function Notifications() {
   const [localSidebarState, setLocalSidebarState] = useState(false)
   const [notifications, setNotifications] = useState([])
+  const [mentorId, setMentorId] = useState('')
 
   function handleStateChange() {
     setLocalSidebarState((prev) => !prev)
   }
 
   function getUserData(data) {
+    setMentorId(data._id)
     setNotifications(data.notifications.reverse())
   }
+
+  async function readNotifications() {
+    try {
+      const response = await axios.post(`${backend}/api/v1/mentors/read-notifications`, { mentorId });
+    } catch (error) {
+      console.log("Error while reading notifications", error);
+    }
+  }
+
+  useEffect(() => {
+    readNotifications()
+  }, [mentorId])
 
 
   return (

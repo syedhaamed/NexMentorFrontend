@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-
 
 function SingleBlogPage() {
     const location = useLocation()
     const { blog } = location.state || {}
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
 
     return (
         <div className='w-full h-auto flex flex-col my-5 xl:my-10 px-5 md:px-20 xl:px-40 2xl:px-60'>

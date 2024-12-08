@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+
 
 function PrivacyPolicy() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
     return (
         <div className='w-full h-auto flex flex-col'>
             <div className='w-full h-auto flex flex-col font-cg-times px-5 my-5'>
@@ -8,7 +12,7 @@ function PrivacyPolicy() {
             </div>
             <div className='w-full h-auto flex flex-col px-5 gap-5 xl:px-10'>
                 <p className='text-sm sm:text-sm md:text-base lg:text-lg '>At <span className='font-bold'>NexMentor</span> (“we,” “our,” or “us”), we are committed to safeguarding your privacy. This Privacy Policy explains how
-                    we collect, use, share, and protect your personal information when you use our platform. By accessing or using 
+                    we collect, use, share, and protect your personal information when you use our platform. By accessing or using
                     <span className='font-bold'> NexMentor</span>, you agree to the practices described in this policy.</p>
                 <div className='w-full h-auto flex flex-col'>
                     <h1 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold'>1. Information We Collect</h1>

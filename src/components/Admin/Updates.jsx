@@ -130,7 +130,7 @@ function AdminUpdates() {
           </div>
           <div className='w-full h-auto flex flex-col mt-5 xl:mt-10 lg:w-[80%] lg:mx-auto gap-4'>
             {
-              currentItems?.map((item, index) => (
+              currentItems?.reverse().map((item, index) => (
                 <div key={index} className="w-full h-auto flex flex-wrap bg-gray-100 py-3 px-2 rounded-lg xl:p-4 gap-x-3">
                   <div className="flex-shrink-0">
                     <img

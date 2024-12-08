@@ -190,7 +190,7 @@ function SearchMentor() {
             setLoading(true)
             const response = await axios.post(`${backend}/api/v1/mentors/search-mentor`, formDetails)
             if (response.data.statusCode === 200) {
-                setUser(response.data.data)
+                setUser(Array.isArray(response.data.data) ? response.data.data : [response.data.data])
                 setLoading(false)
             }
         } catch (error) {

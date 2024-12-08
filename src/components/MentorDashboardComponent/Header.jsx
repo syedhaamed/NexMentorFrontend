@@ -14,6 +14,7 @@ const backend = import.meta.env.VITE_BACKEND_URL;
 function Header({ handleStateChange, getData }) {
     const [sideBar, setSideBar] = useState(false)
     const [userDetails, setUserDetails] = useState({})
+    const [notifications, setNotifications] = useState([])
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -26,6 +27,7 @@ function Header({ handleStateChange, getData }) {
         try {
             const response = await axios.post(`${backend}/api/v1/mentors/mentor-details`, { id })
             if (response.data.statusCode === 200) {
+                setNotifications(response.data.data.notifications)
                 setUserDetails(response.data.data)
                 if (getData) {
                     getData(response.data.data);
@@ -67,7 +69,14 @@ function Header({ handleStateChange, getData }) {
                 <span className='font-[inter] font-semibold text-xl lg:text-3xl'>Dashboard</span>
             </div>
             <div className='flex w-auto h-auto gap-4 items-center lg:gap-8'>
-                <NavLink to='/mentor-dashboard/notifications'><IoNotificationsOutline size={25} /></NavLink>
+                <NavLink to='/mentor-dashboard/notifications' className='w-8 h-8 flex justify-center items-center relative cursor-pointer'>
+                    {
+                        notifications[notifications.length - 1]?.isRead
+                            ? null
+                            : <span className='w-2 h-2 absolute top-1 right-1.5 bg-blue-500 rounded-full'></span>
+                    }
+                    <IoNotificationsOutline size={25} />
+                </NavLink>
                 <NavLink to='/mentor-dashboard/chat'><IoMailOutline size={25} /></NavLink>
                 <span className=''><img src={userDetails?.profilePicture} alt="profile Picture" className='h-9 w-9 bg-gray-200 rounded-full border-[1px] object-cover border-blue-500 xl:w-12 xl:h-12' /></span>
             </div>

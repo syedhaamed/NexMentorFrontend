@@ -5,6 +5,7 @@ import axios from 'axios';
 import Loading from '../utils/Loading';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -12,6 +13,8 @@ function PendingSessions() {
     const [localSidebarState, setLocalSidebarState] = useState(false)
     const [loading, setLoading] = useState(false)
     const [adminId, setAdminId] = useState('')
+    const [deletePopUp, setDeletePopUp] = useState(false)
+    const [sessionId, setSessionId] = useState('')
     const [pendingSessions, setPendingSessions] = useState([])
     const [originalPendingSessions, setOriginalPendingSessions] = useState([]);
     const [searchedMentor, setSearchedMentor] = useState('')
@@ -77,12 +80,23 @@ function PendingSessions() {
         }
     }
 
+    function handleDelete(id) {
+        setDeletePopUp(true)
+        setSessionId(id)
+    }
+
+    function handleClose() {
+        setDeletePopUp(false)
+        setSessionId('')
+    }
+
     async function removePendingSession(id) {
         try {
             setLoading(true)
             const response = await axios.post(`${backend}/api/v1/admin/remove-pending-session`, { id, adminId })
             if (response.data.statusCode === 200) {
                 fetchPendingSessions()
+                setDeletePopUp(false)
                 setLoading(false)
             }
         } catch (error) {
@@ -202,7 +216,7 @@ function PendingSessions() {
                                     <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
                                         {formatDateToIST(item?.purchasedDate)}
                                     </td>
-                                    <td onClick={() => removePendingSession(item._id)} className="py-3 px-3 whitespace-nowrap text-sm text-center text-red-500 cursor-pointer md:hover:text-red-600 md:hover:underline md:underline-offset-2">
+                                    <td onClick={() => handleDelete(item._id)} className="py-3 px-3 whitespace-nowrap text-sm text-center text-red-500 cursor-pointer md:hover:text-red-600 md:hover:underline md:underline-offset-2">
                                         Delete
                                     </td>
                                 </tr>
@@ -238,6 +252,22 @@ function PendingSessions() {
                             </div>
                         )
                     }
+                    <Dialog open={deletePopUp} onClose={handleClose}>
+                        <DialogTitle>Confirm Deletion</DialogTitle>
+                        <DialogContent>
+                            <Typography>
+                                Are you sure you want to Delete This Pending request?
+                            </Typography>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={() => removePendingSession(sessionId)} color="error">
+                                Yes
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             </div>
         </>

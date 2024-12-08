@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import LandingPage from './BecameMentorComponents/LandingPage'
 import ScrollView from './BecameMentorComponents/ScrollView'
 import JoinSteps from './BecameMentorComponents/JoinSteps'
@@ -8,17 +8,21 @@ import Testimonials from './HomeComponents/Testimonials'
 import Faq from './HomeComponents/Faq'
 
 function BecameMentor() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
   return (
     <div className='w-full h-auto flex flex-col'>
-        <LandingPage />
-        <ScrollView />
-        <JoinSteps />
-        <Banner />
-        <FeeInfo />
-        <div className='mt-10'>
+      <LandingPage />
+      <ScrollView />
+      <JoinSteps />
+      <Banner />
+      <FeeInfo />
+      <div className='mt-10'>
         <Testimonials />
-        </div>
-        <Faq />
+      </div>
+      <Faq />
     </div>
   )
 }

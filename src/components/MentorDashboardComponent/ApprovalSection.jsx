@@ -6,6 +6,7 @@ import { MdOutlineDone } from "react-icons/md";
 import Loading from '../utils/Loading'
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -13,6 +14,9 @@ function ApprovalSection() {
   const [sessionRequests, setSessionsRequests] = useState([])
   const [originalSessionRequests, setOriginalSessionRequests] = useState([]);
   const [searchStudent, setSearchStudent] = useState('')
+  const [acceptPopUp, setAcceptPopUp] = useState(false)
+  const [sessionId, setSessionId] = useState('')
+  const [selectedStudentId, setSelectedStudentId] = useState('')
   const [loading, setLoading] = useState(false)
   const [mentorId, setMentorId] = useState('')
   const [localSidebarState, setLocalSidebarState] = useState(false)
@@ -61,12 +65,25 @@ function ApprovalSection() {
     }
   }
 
+  function handleAccept(id, studentid) {
+    setAcceptPopUp(true)
+    setSessionId(id)
+    setSelectedStudentId(studentid)
+  }
+
+  function handleClose() {
+    setAcceptPopUp(false)
+    setSessionId('')
+    setSelectedStudentId('')
+  }
+
   async function acceptSessionRequests(requestId, studentId) {
     try {
       setLoading(true)
       const response = await axios.post(`${backend}/api/v1/mentors/accept-sessions-request`, { requestId, studentId, mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
+        setAcceptPopUp(false)
         fetchSessionRequests();
       }
 
@@ -157,7 +174,7 @@ function ApprovalSection() {
                       <span className='w-4/12 text-center'>{item.package.packageName}</span>
                       <span className='sm:w-4/12 sm:text-center hidden sm:block'>{item.status}</span>
                       <span className='w-4/12 text-center sm:w-4/12'>{item.student.username}</span>
-                      <div className='w-1/12 text-center'><MdOutlineDone size={20} onClick={() => acceptSessionRequests(item._id, item.student._id)} className='text-blue-500 cursor-pointer' /></div>
+                      <div className='w-1/12 text-center'><MdOutlineDone size={20} onClick={() => handleAccept(item._id, item.student._id)} className='text-blue-500 cursor-pointer' /></div>
                     </div>
 
                   </div>
@@ -190,6 +207,22 @@ function ApprovalSection() {
             </div>
           )
         }
+        <Dialog open={acceptPopUp} onClose={handleClose}>
+          <DialogTitle>Accepting Session Request</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to Accept This Session request?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={() => acceptSessionRequests(sessionId, selectedStudentId)} color="error">
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   )
