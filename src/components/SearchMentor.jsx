@@ -236,7 +236,7 @@ function SearchMentor() {
                     <div className='w-full h-auto flex flex-col lg:w-[60vw] xl:w-[70vw]'>
                         <div className='w-full h-auto shadow-custom  px-6 pt-4 border-[1px] flex flex-col rounded-xl lg:py-4 '>
                             <div className='w-full h-auto flex flex-col gap-3 sm:flex-row sm:items-center'>
-                                <input type="text" placeholder='Search by ID' value={formDetails.username} onChange={(e) => handleChange("username", e.target.value)} className='w-full h-9 border-[1px] border-gray-400 px-2 py-1 rounded-md outline-none sm:h-11' />
+                                <input type="text" placeholder='Search by Name' value={formDetails.username} onChange={(e) => handleChange("username", e.target.value)} className='w-full h-9 border-[1px] border-gray-400 px-2 py-1 rounded-md outline-none sm:h-11' />
                                 <div className='bg-white w-full h-9 px-2 py-1 flex justify-center items-center rounded-md border-[1px] border-gray-400 sm:h-11 sm:w-[60vw] lg:w-96'>
                                     <select className=' w-full bg-white outline-none rounded-md'
                                         placeholder='Select Year'
