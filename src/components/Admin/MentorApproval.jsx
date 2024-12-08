@@ -297,7 +297,7 @@ function MentorApproval() {
               <Button onClick={handleRejectClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={() => acceptApprovalRequest(selectedMentorId)} color="error">
+              <Button onClick={() => removeApprovalRequest(selectedMentorId)} color="error">
                 Yes
               </Button>
             </DialogActions>
@@ -313,7 +313,7 @@ function MentorApproval() {
               <Button onClick={handleApproveClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={() => removeApprovalRequest(selectedMentorId)} color="error">
+              <Button onClick={() => acceptApprovalRequest(selectedMentorId)} color="error">
                 Yes
               </Button>
             </DialogActions>
