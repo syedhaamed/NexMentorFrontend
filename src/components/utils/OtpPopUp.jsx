@@ -54,11 +54,7 @@ export default function VerifyEmailOTP({ open, handleClose, email, userType }) {
             const response = await axios.post(endpoint, { email, otp });
             if (response.data.statusCode === 200) {
                 setLoading(false);
-                if (userType === 'mentor') {
-                    navigate('/signup/mentor-signup')
-                } else {
-                    handleClose(true);
-                }
+                handleClose(true);
             }
         } catch (error) {
             console.log("Error while verifying OTP: ", error);

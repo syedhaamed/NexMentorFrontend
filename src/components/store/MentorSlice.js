@@ -19,10 +19,13 @@ const mentorSlice = createSlice({
                 ...state,
                 ...action.payload
             };
+        },
+        resetMentorInfo: () => {
+            return initialState;
         }
     }
 });
 
-export const { setMentorInfo } = mentorSlice.actions;
+export const { setMentorInfo , resetMentorInfo} = mentorSlice.actions;
 
 export default mentorSlice;

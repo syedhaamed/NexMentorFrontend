@@ -8,6 +8,9 @@ import Loading from './utils/Loading';
 import ErrorPopup from './utils/ErrorPopUp';
 import { useNavigate } from 'react-router-dom';
 import SideImage from './images/Mentorapplication.webp'
+import { useDispatch, useSelector } from 'react-redux';
+import VerifyEmailOTP from './utils/OtpPopUp';
+import { resetMentorInfo } from './store/MentorSlice';
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -52,6 +55,7 @@ function FileUpload({ label, onFileChange }) {
 function MentorSignup() {
   const [year, setYear] = useState('');
   const [amount, setAmount] = useState('')
+  const [verifyEmailPopUp, setVerifyEmailPopUp] = useState(false)
   const [gender, setGender] = useState('');
   const [neetAttempt, setNeetAttempt] = useState('');
   const [neetScoreCard, setNeetScoreCard] = useState(null);
@@ -67,8 +71,10 @@ function MentorSignup() {
     number: '',
   })
   const id = JSON.parse(localStorage.getItem("userId"));
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
+  const mentorData = useSelector((state) => state.mentor)
 
   const handleChangeYear = (event) => setYear(event.target.value);
   const handleChangeGender = (event) => setGender(event.target.value);
@@ -92,6 +98,24 @@ function MentorSignup() {
     setNeetScoreCard(null)
     setCollegeId(null)
   }
+
+  const handleClose = async (verified) => {
+    if (verified) {
+      handlePayment()
+    } else {
+      const userEmail = mentorData.email;
+      try {
+        await axios.post(`${backend}/api/v1/mentors/delete-mentor`, { email: userEmail });
+      } catch (error) {
+        console.error("Error while removing unverified user!", error);
+      }
+      navigate('/signup')
+    }
+    localStorage.removeItem("userId")
+    setVerifyEmailPopUp(false);
+    resetForm()
+    dispatch(resetMentorInfo())
+  };
 
   async function onPayment() {
     try {
@@ -128,6 +152,7 @@ function MentorSignup() {
       paymentObject.open()
     } catch (error) {
       console.log(error);
+      await axios.post(`${backend}/api/v1/mentors/delete-mentor`, { email: mentorData.email });
       setLoading(false)
       setErrorMsg(error.response.data.message)
       setErrorPopUp(true)
@@ -137,6 +162,23 @@ function MentorSignup() {
   function handleCloseErrorPopUp() {
     setErrorPopUp(false)
   }
+
+  const verifyEmail = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`${backend}/api/v1/mentors/create-account`, mentorData)
+      if (response.data.statusCode === 200) {
+        localStorage.setItem("userId", JSON.stringify(response.data.data));
+        setVerifyEmailPopUp(true);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error while verifying email!", error);
+      setErrorMsg(error.response?.data?.message || "An error occurred");
+      setErrorPopUp(true);
+      setLoading(false);
+    }
+  };
 
   async function handlePayment() {
     try {
@@ -203,6 +245,7 @@ function MentorSignup() {
   return (
     <>
       {loading && <Loading />}
+      <VerifyEmailOTP open={verifyEmailPopUp} handleClose={handleClose} email={mentorData.email} userType={'mentor'} />
       <ErrorPopup open={errorPopUp} handleClose={handleCloseErrorPopUp} errorMessage={errorMsg} />
       <header className='w-full h-auto flex items-center p-5 xl:hidden'>
         <img src={Logo} alt="neXmentor Logo" className='w-40 sm:w-52 md:w-60' />
@@ -336,13 +379,13 @@ function MentorSignup() {
                 <label htmlFor="agree" className='text-gray-500 text-xs lg:text-sm'>I agree with verification steps in <span className='text-black font-semibold'>For Mentor</span>, <span className='text-black font-semibold'>Terms and Condition</span> and <span className='text-black font-semibold'>Refund Policy</span></label>
               </div>
               <div
-                onClick={check ? handlePayment : undefined}
+                onClick={check ? verifyEmail : undefined}
                 className={`w-auto h-10 flex justify-center items-center font-cg-times text-white my-5 rounded-md mx-5 md:text-lg ${check
                   ? 'bg-[#0092DB] cursor-pointer active:bg-[#0092dbbd] md:hover:bg-[#0092dbbd]'
                   : 'bg-gray-400 cursor-not-allowed'
                   }`}
               >
-                Continue and Pay ₹{amount}
+                Verify and Pay ₹{amount}
               </div>
             </div>
           </div>

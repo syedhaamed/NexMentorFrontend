@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoginParam } from './store/ParamsSlice';
 import Loading from './utils/Loading';
 import Slider from './utils/Slider';
+import { setMentorInfo } from './store/MentorSlice';
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
@@ -80,9 +81,9 @@ function Signup() {
     if (verified) {
       setAccountCreatedPopUp(true);
     } else {
-      const userEmail = activeContainer === 'student' ? accountData.student.email : accountData.mentor.email;
+      const userEmail = accountData.student.email
       try {
-        await axios.post(`${backend}/api/v1/${activeContainer}s/delete-${activeContainer}`, { email: userEmail });
+        await axios.post(`${backend}/api/v1/students/delete-student`, { email: userEmail });
       } catch (error) {
         console.error("Error while removing unverified user!", error);
       }
@@ -105,15 +106,23 @@ function Signup() {
   }
 
   const verifyEmail = async () => {
-    const accountData2 = activeContainer === 'student' ? accountData.student : accountData.mentor;
-    const url = `${backend}/api/v1/${activeContainer}s/create-account`;
-
     try {
       setLoading(true);
-      const response = await axios.post(url, accountData2);
-      if (response.data.statusCode === 200) {
-        localStorage.setItem("userId", JSON.stringify(response.data.data));
-        setVerifyEmailPopUp(true);
+      if (activeContainer === 'student') {
+        const response = await axios.post(`${backend}/api/v1/students/create-account`, accountData.student)
+        if (response.data.statusCode === 200) {
+          localStorage.setItem("userId", JSON.stringify(response.data.data));
+          setVerifyEmailPopUp(true);
+        }
+      }
+      else {
+        if (accountData.mentor.password !== accountData.mentor.confirmPassword) {
+          setErrorMsg("Password and Confirm password do not match");
+          setErrorPopUp(true);
+        } else {
+          dispatch(setMentorInfo(accountData.mentor))
+          navigate("/signup/mentor-signup")
+        }
       }
       setLoading(false);
     } catch (error) {
@@ -146,7 +155,7 @@ function Signup() {
   return (
     <>
       {loading && <Loading />}
-      <VerifyEmailOTP open={verifyEmailPopUp} handleClose={handleClose} email={activeContainer === 'student' ? accountData.student.email : accountData.mentor.email} userType={activeContainer === 'student' ? 'student' : 'mentor'} />
+      <VerifyEmailOTP open={verifyEmailPopUp} handleClose={handleClose} email={accountData.student.email} userType={'student'} />
       {accountCreatedPopUp && (
         <Dialog open={accountCreatedPopUp} onClose={() => setAccountCreatedPopUp(false)}>
           <DialogTitle>Account Created</DialogTitle>
