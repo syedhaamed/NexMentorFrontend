@@ -53,7 +53,7 @@ function ContactPage() {
                 <div className='w-full h-auto flex flex-col font-cg-times px-5 my-5'>
                     <h1 className='text-center text-xs md:text-sm xl:text-base'>Get in Touch with Us</h1>
                     <h1 className='text-center text-2xl my-3 md:text-4xl xl:text-5xl xl:my-6'>We're Here to Help You</h1>
-                    <p className='text-gray-500 text-center text-xs md:text-sm md:px-10 lg:px-20 xl:px-40 xl:text-base'>Whether you have questions about your condition, need to schedule an appointment, or want to learn more about our services, our team is here to assist you. Reach out to us today, and we’ll ensure you get the support and information you need.</p>
+                    <p className='text-gray-500 text-center text-xs md:text-sm md:px-10 lg:px-20 xl:px-40 xl:text-base'>Whether you have questions about our platform, need assistance with booking a session, or want to learn more about our services, our team is here to assist you. Reach out to us today, and we’ll ensure you get the support and information you need.</p>
                 </div>
                 <div className='w-full h-auto flex flex-col px-5 gap-3 my-5 mb-14 sm:flex-row-reverse sm:border-2 sm:p-3 rounded-xl border-blue-900 md:w-[70%] md:mx-auto md:p-5 md:gap-4 lg:justify-center lg:gap-8 xl:w-[60%]'>
                     <div className='w-full h-auto flex flex-col gap-4 lg:w-[50%] xl:gap-6'>
