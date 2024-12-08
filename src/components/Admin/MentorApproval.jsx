@@ -86,7 +86,7 @@ function MentorApproval() {
       const response = await axios.post(`${backend}/api/v1/admin/accept-approval`, { mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
-        setApprovePopUp(false)
+        handleApproveClose()
         fetchApprovalRequests()
       }
     } catch (error) {
@@ -101,7 +101,7 @@ function MentorApproval() {
       const response = await axios.post(`${backend}/api/v1/admin/remove-approval`, { mentorId })
       if (response.data.statusCode === 200) {
         setLoading(false)
-        setRejectPopUp(false)
+        handleRejectClose()
         fetchApprovalRequests()
       }
     } catch (error) {

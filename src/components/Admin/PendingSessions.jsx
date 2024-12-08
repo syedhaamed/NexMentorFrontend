@@ -95,8 +95,8 @@ function PendingSessions() {
             setLoading(true)
             const response = await axios.post(`${backend}/api/v1/admin/remove-pending-session`, { id, adminId })
             if (response.data.statusCode === 200) {
+                handleClose()
                 fetchPendingSessions()
-                setDeletePopUp(false)
                 setLoading(false)
             }
         } catch (error) {
