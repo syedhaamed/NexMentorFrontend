@@ -36,10 +36,10 @@ function Webinars() {
     }
   };
 
-  async function getAdminDetails() {
+  async function getAdminDetails(id) {
     try {
       setLoading(true)
-      const response = await axios.post(`${backend}/api/v1/admin/admin-details`, { id: adminId })
+      const response = await axios.post(`${backend}/api/v1/admin/admin-details`, { id })
       if (response.data.statusCode === 200) {
         setWebinarDetails(response.data.data.webinar)
         setLoading(false)
@@ -106,7 +106,7 @@ function Webinars() {
       const decodedToken = jwtDecode(token);
       if (decodedToken.id === adminId) {
         setAdminId(decodedToken.id)
-        getAdminDetails()
+        getAdminDetails(decodedToken.id)
       }
     }
     else {
