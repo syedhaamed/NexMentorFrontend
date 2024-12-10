@@ -4,7 +4,7 @@ import { FaAngleUp } from "react-icons/fa";
 import { Range } from "react-range";
 import axios from 'axios'
 import Loading from './utils/Loading'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import ErrorPopup from './utils/ErrorPopUp';
 import { StarRating } from './utils/StarRating';
 
@@ -101,6 +101,7 @@ function SearchMentor() {
     });
     const [errorPopUp, setErrorPopUp] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
+    const [searchParams] = useSearchParams();
 
     const indianStatesAndUTs = [
         "Andhra Pradesh",
@@ -221,6 +222,13 @@ function SearchMentor() {
     };
 
     useEffect(() => {
+        const token = searchParams.get('token');
+        const userId = searchParams.get('userId');
+        if (token && userId) {
+            localStorage.setItem("auth", JSON.stringify(token));
+            localStorage.setItem("userId", JSON.stringify(userId));
+            localStorage.setItem("userType", JSON.stringify("Student"));
+        }
         fetchUsers(pagination.currentPage)
     }, [pagination.currentPage])
 
