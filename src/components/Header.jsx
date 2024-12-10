@@ -83,7 +83,7 @@ function Header() {
   useEffect(() => {
     const token1 = searchParams.get('token');
     const userId1 = searchParams.get('userId');
-    if (token && userId) {
+    if (token1 && userId1) {
       localStorage.setItem("auth", JSON.stringify(token1));
       localStorage.setItem("userId", JSON.stringify(userId1));
       localStorage.setItem("userType", JSON.stringify("Student"));
