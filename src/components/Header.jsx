@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Logo from './images/logo2.webp';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { IoMdNotificationsOutline } from "react-icons/io";
 import Loading from './utils/Loading';
@@ -36,7 +36,7 @@ function Header() {
   const imageRef = useRef(null);
   const navigate = useNavigate();
   const updateKey = useSelector((state) => state.header.updateKey);
-
+  const [searchParams] = useSearchParams();
 
   // Fetch user details asynchronously
   const fetchUser = async (id) => {
@@ -81,6 +81,13 @@ function Header() {
 
   // Initialize user data fetching on mount
   useEffect(() => {
+    const token1 = searchParams.get('token');
+    const userId1 = searchParams.get('userId');
+    if (token && userId) {
+      localStorage.setItem("auth", JSON.stringify(token1));
+      localStorage.setItem("userId", JSON.stringify(userId1));
+      localStorage.setItem("userType", JSON.stringify("Student"));
+    }
     const token = JSON.parse(localStorage.getItem("auth"))
     const userId = JSON.parse(localStorage.getItem("userId"))
     const user = JSON.parse(localStorage.getItem("userType"))
