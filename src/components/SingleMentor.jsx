@@ -40,39 +40,40 @@ function SingleMentor() {
 
   async function bookSession(id) {
     try {
-      const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
-      const data = response.data.data
+      alert("Session Booking will be Starting from 1 January 2025.")
+      // const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
+      // const data = response.data.data
 
-      const paymentObject = new window.Razorpay({
-        key: "rzp_live_b0TsznPSQSsjx8",
-        order_id: data.id,
-        ...data,
-        handler: function (response) {
-          const option2 = {
-            orderId: response.razorpay_order_id,
-            paymentId: response.razorpay_payment_id,
-            signature: response.razorpay_signature,
-            packageId: id,
-            studentId: studentId
-          }
-          axios.post(`${backend}/api/v1/students/verify-payment`, option2)
-            .then((response) => {
-              if (response.data.success === true) {
-                setLoading(true)
-                dispatch(triggerHeaderUpdate());
-                navigate("/student-profile")
-              } else {
-                setErrorMsg(error.response.data.message)
-                setErrorPopUp(true)
-              }
-            }).catch((error) => {
-              console.log(error);
-              setErrorMsg(error.response.data.message)
-              setErrorPopUp(true)
-            })
-        }
-      })
-      paymentObject.open()
+      // const paymentObject = new window.Razorpay({
+      //   key: "rzp_live_b0TsznPSQSsjx8",
+      //   order_id: data.id,
+      //   ...data,
+      //   handler: function (response) {
+      //     const option2 = {
+      //       orderId: response.razorpay_order_id,
+      //       paymentId: response.razorpay_payment_id,
+      //       signature: response.razorpay_signature,
+      //       packageId: id,
+      //       studentId: studentId
+      //     }
+      //     axios.post(`${backend}/api/v1/students/verify-payment`, option2)
+      //       .then((response) => {
+      //         if (response.data.success === true) {
+      //           setLoading(true)
+      //           dispatch(triggerHeaderUpdate());
+      //           navigate("/student-profile")
+      //         } else {
+      //           setErrorMsg(error.response.data.message)
+      //           setErrorPopUp(true)
+      //         }
+      //       }).catch((error) => {
+      //         console.log(error);
+      //         setErrorMsg(error.response.data.message)
+      //         setErrorPopUp(true)
+      //       })
+      //   }
+      // })
+      // paymentObject.open()
     } catch (error) {
       console.log("error while booking session", error);
       setErrorMsg(error.response?.data?.message || "An error occurred");

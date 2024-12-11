@@ -63,6 +63,7 @@ function Header() {
 
   async function readNotifications() {
     try {
+      if (notifications[0].isRead === true) return
       const response = await axios.post(`${backend}/api/v1/students/read-notifications`, { studentId });
       fetchUser(studentId)
     } catch (error) {
