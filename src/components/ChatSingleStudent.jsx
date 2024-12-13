@@ -81,7 +81,6 @@ function ChatSingle() {
         }
     }
 
-
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem("auth"))
         const userId = JSON.parse(localStorage.getItem("userId"))
