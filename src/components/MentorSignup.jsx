@@ -126,14 +126,14 @@ function MentorSignup() {
         key: "rzp_live_b0TsznPSQSsjx8",
         order_id: data.id,
         ...data,
-        handler: function (response) {
+        handler: async function (response) {
           const option2 = {
             orderId: response.razorpay_order_id,
             paymentId: response.razorpay_payment_id,
             signature: response.razorpay_signature,
             userId: id
           }
-          axios.post(`${backend}/api/v1/mentors/verify-payment`, option2)
+          await axios.post(`${backend}/api/v1/mentors/verify-payment`, option2)
             .then((response) => {
               if (response.data.success === true) {
                 navigate('/signup/mentor-signup/mentor-signup-success')
@@ -147,16 +147,28 @@ function MentorSignup() {
               setErrorMsg(error.response.data.message)
               setErrorPopUp(true)
             })
-        }
+        },
+        modal: {
+          ondismiss: function () {
+            handlePaymentDismiss();
+          },
+        },
       })
       paymentObject.open()
     } catch (error) {
       console.log(error);
-      await axios.post(`${backend}/api/v1/mentors/delete-mentor`, { email: mentorData.email });
+      const userEmail = mentorData.email;
+      await axios.post(`${backend}/api/v1/mentors/delete-mentor`, { email: userEmail });
       setLoading(false)
       setErrorMsg(error.response.data.message)
       setErrorPopUp(true)
     }
+  }
+
+  async function handlePaymentDismiss() {
+    const userEmail = mentorData.email;
+    await axios.post(`${backend}/api/v1/mentors/delete-mentor`, { email: userEmail })
+    navigate("/signup")
   }
 
   function handleCloseErrorPopUp() {
