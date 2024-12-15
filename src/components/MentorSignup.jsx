@@ -219,7 +219,9 @@ function MentorSignup() {
       if (response.data.statusCode === 200) {
         setLoading(false)
         resetForm()
-        onPayment()
+        // onPayment() remove comment to add payment
+        navigate('/signup/mentor-signup/mentor-signup-success') // remove it later to add payment again
+        localStorage.removeItem("userId")  // remove it later to add payment again
       }
     } catch (error) {
       console.log("Error while making payment:", error);
@@ -397,7 +399,8 @@ function MentorSignup() {
                   : 'bg-gray-400 cursor-not-allowed'
                   }`}
               >
-                Verify and Pay ₹{amount}
+                Verify and Continue
+                {/* Pay ₹{amount} */}
               </div>
             </div>
           </div>
