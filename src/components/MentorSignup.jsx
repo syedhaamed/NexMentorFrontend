@@ -246,7 +246,7 @@ function MentorSignup() {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
       event.returnValue = ''
-    };
+    }
     getVerificationAmount()
 
     window.addEventListener('beforeunload', handleBeforeUnload);
