@@ -94,7 +94,7 @@ function Login() {
           <Slider />
           {/* Main form */}
           <div className='w-auto h-auto flex flex-col mt-10 mx-5 xl:w-[35%] 2xl:w-[30%]'>
-            <div className='w-full h-auto flex justify-center items-center text-2xl font-cg-times font-bold'>LOGIN</div>
+            <div className='w-full h-auto flex justify-center items-center text-2xl font-cg-times font-bold'>LOGIN AS {activeContainer.toUpperCase()}</div>
             <div className='w-auto h-auto flex font-cg-times text-sm mt-5'>
               <p onClick={() => handleButtonClick('student')} className={`${activeContainer === 'student' ? 'bg-[#0092DB] text-white' : 'bg-gray-200 text-black'} w-[50%] h-10 flex items-center justify-center cursor-pointer lg:text-xl `}>Student</p>
               <p onClick={() => handleButtonClick('mentor')} className={`${activeContainer === 'mentor' ? 'bg-[#0092DB] text-white' : 'bg-gray-200 text-black'} w-[50%] h-10 flex items-center justify-center cursor-pointer lg:text-xl `}>Mentor</p>
