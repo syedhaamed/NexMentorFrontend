@@ -163,7 +163,7 @@ function Mentors() {
                   State
                 </th>
                 <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  City
+                  Contact
                 </th>
                 <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Ratings
@@ -192,7 +192,7 @@ function Mentors() {
                     {item?.address.state}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
-                    {item?.address.city}
+                    {item?.number}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
                     <StarRating
