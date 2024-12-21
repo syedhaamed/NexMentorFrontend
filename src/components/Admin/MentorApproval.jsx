@@ -188,6 +188,9 @@ function MentorApproval() {
                   Neet Score
                 </th>
                 <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Institute
                 </th>
                 <th className="py-3 px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -230,6 +233,9 @@ function MentorApproval() {
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
                     {item?.neetScore}
+                  </td>
+                  <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
+                    {item?.email}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap text-sm text-center">
                     {item?.institute}
