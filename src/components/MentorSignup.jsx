@@ -177,6 +177,18 @@ function MentorSignup() {
 
   const verifyEmail = async () => {
     try {
+      if (
+        !year.trim() || !gender.trim() || !neetAttempt.trim() ||
+        !neetScoreCard || !collegeId || !check ||
+        !mentorDetails.neetScore.trim() ||
+        !mentorDetails.neetExamYear.trim() ||
+        !mentorDetails.institute.trim() ||
+        !mentorDetails.number.trim()
+      ) {
+        setErrorMsg("Please fill all the details");
+        setErrorPopUp(true);
+        return;
+      }
       setLoading(true);
       const response = await axios.post(`${backend}/api/v1/mentors/create-account`, mentorData)
       if (response.data.statusCode === 200) {
