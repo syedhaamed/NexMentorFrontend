@@ -107,7 +107,7 @@ function Sessions() {
       // console.log(response.data);
 
       if (response.data.statusCode === 200) {
-        fetchActiveSessions(mentorId)
+        fetchActiveSessions(pagination.currentPage,mentorId)
         setCompletePopUp(false)
         setSelectedImage(null)
         setLoading(false)

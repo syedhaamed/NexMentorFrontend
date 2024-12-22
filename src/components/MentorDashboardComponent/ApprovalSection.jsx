@@ -84,7 +84,7 @@ function ApprovalSection() {
       if (response.data.statusCode === 200) {
         setLoading(false)
         setAcceptPopUp(false)
-        fetchSessionRequests();
+        fetchSessionRequests(pagination.currentPage, mentorId)
       }
 
     } catch (error) {
