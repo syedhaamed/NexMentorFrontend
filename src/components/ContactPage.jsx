@@ -91,7 +91,7 @@ function ContactPage() {
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Open hours</p>
                         <p className='text-sm text-white xl:text-base'>24/7</p>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Location</p>
-                        <p className='text-sm text-white xl:text-base'>Channi Himmat, Jammu,Jammu & Kashmir, India Pincode: 180015</p>
+                        <p className='text-sm text-white xl:text-base'>New Light Colony, Sopore, Baramulla, Jammu and Kashmir, India - 193201</p>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Follow us</p>
                         <div className='w-full h-auto flex items-center gap-4 text-white'>
                             <NavLink to='https://www.instagram.com/nexmentor.in/?utm_source=ig_web_button_share_sheet' target='_blank'><FaInstagram size={25} /></NavLink>
