@@ -334,7 +334,7 @@ function MentorSignup() {
               </FormControl>
               <div className='w-full h-auto flex justify-between mt-3'>
                 <TextField
-                  label="Institute"
+                  label="Medical College"
                   variant="outlined"
                   margin="normal"
                   className='w-[48%]'
