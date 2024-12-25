@@ -89,7 +89,7 @@ function ContactPage() {
                             </div>
                         </div>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Open hours</p>
-                        <p className='text-sm text-white xl:text-base'>24/7</p>
+                        <p className='text-sm text-white xl:text-base'>09:00 AM to 09:00 PM</p>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Location</p>
                         <p className='text-sm text-white xl:text-base'>New Light Colony, Sopore, Baramulla, Jammu and Kashmir, India - 193201</p>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Follow us</p>

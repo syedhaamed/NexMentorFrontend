@@ -40,7 +40,7 @@ function SingleMentor() {
 
   async function bookSession(id) {
     try {
-      alert("Session Booking will be Starting from 1 January 2025.")
+      alert("Session Booking will be Starting from 16 January 2025.")
       // const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
       // const data = response.data.data
 
