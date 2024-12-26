@@ -59,7 +59,7 @@ function FeaturedMentors() {
                     ) : (
                         featuredMentors.length > 0
                             ? featuredMentors.map((user, index) => (
-                                <div key={index} className='w-full h-auto shadow-custom flex flex-col rounded-md font-cg-times'>
+                                <div key={index} className='w-full h-auto shadow-custom flex flex-col justify-between rounded-md font-cg-times'>
                                     <img src={user.profilePicture} alt="profile Picture" className='w-full h-48 object-cover rounded-t-md lg:h-56' loading="lazy" />
                                     <div className='w-full h-auto flex items-center justify-between px-2 font-cg-times mt-3 text-lg font-semibold md:text-xl'>
                                         <span>{user.firstName} {user.lastName}</span>

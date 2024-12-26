@@ -169,6 +169,8 @@ function SearchMentor() {
             setLoading(true)
             const response = await axios.get(`${backend}/api/v1/mentors/all-mentors?page=${page}`, formDetails)
             if (response.data.statusCode === 200) {
+                console.log(response.data.data.pagination);
+                
                 setUser(response.data.data.data)
                 setPagination(response.data.data.pagination)
                 setLoading(false)
@@ -339,11 +341,11 @@ function SearchMentor() {
                                 </div>
                             }
                         </div>
-                        <div className='w-full h-auto flex flex-wrap gap-3 py-6 justify-center mt-5 sm:items-start xl:gap-8'>
+                        <div className='w-full h-auto flex flex-wrap gap-3 py-6 sm:gap-6 justify-center mt-5 sm:items-start xl:gap-8'>
                             {
                                 users.length > 0
                                     ? users.map((user, index) => (
-                                        <div key={index} className='w-72 h-auto shadow-custom  flex flex-col rounded-md font-cg-times'>
+                                        <div key={index} className='w-72 h-auto shadow-custom  flex flex-col rounded-md font-cg-times sm:h-[340px] sm:justify-between md:h-[360px] lg:h-[385px]'>
                                             <img src={user.profilePicture} alt="profile Picture" className='w-full h-48 object-cover rounded-t-md lg:h-56' />
                                             <div className='w-full h-auto flex items-center justify-between px-2 font-cg-times mt-3 text-lg font-semibold md:text-xl'>
                                                 <span>{user.firstName} {user.lastName}</span>
