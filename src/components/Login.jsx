@@ -87,7 +87,6 @@ function Login() {
       <div className='w-full h-auto flex flex-col overflow-x-hidden sm:w-[60%] sm:mx-auto md:w-[55%] lg:w-[45%] xl:w-full xl:mt-20'>
         <div className='w-full h-auto flex flex-col justify-center items-center mt-2 gap-2 font-cg-times xl:hidden'>
           <h1 className='text-[#0092DB] text-3xl font-bold'>Welcome Back</h1>
-          <p className='text-lg'>Some words will come here</p>
         </div>
         <div className='w-full h-auto xl:flex xl:justify-center xl:gap-5 2xl:gap-10'>
           {/* Image slider */}
