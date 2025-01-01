@@ -163,7 +163,7 @@ function SingleMentor() {
                         <span className='text-sm w-[80%] md:text-base font-semibold'>{item.packageName}</span>
                       </div>
                       <p style={{ whiteSpace: "pre-wrap" }} dangerouslySetInnerHTML={{ __html: item.packageDescription }} className='w-full h-auto font-cg-times text-[#2E2E2E] text-xs md:text-base' />
-                      <div className='w-full h-auto flex justify-end items-center gap-1 text-sm md:text-lg font-semibold'>₹ {item.packagePrice} <span className='text-xs line-through font-extralight'>₹ {item.packagePrice + 100}</span> <span className='hidden md:block text-xs font-extralight'>(Save ₹100)</span> </div>
+                      <div className='w-full h-auto flex justify-end items-center gap-1 text-sm md:text-lg font-semibold'>₹ {item.packagePrice} <span className='text-xs line-through font-extralight'>₹ {item.realPackagePrice}</span> <span className='hidden md:block text-xs font-extralight'>(Save ₹{item.realPackagePrice - item.packagePrice})</span> </div>
                       <div onClick={() => studentId === '' ? navigate('/login') : bookSession(item._id)} className='w-full h-auto bg-[#0092DB] flex justify-center items-center text-white py-1 mt-2 cursor-pointer md:py-1.5 md:hover:bg-[#0092dbb6] active:bg-[#0092dbb6] rounded-sm'>Book Session</div>
                     </div>
                   ))
