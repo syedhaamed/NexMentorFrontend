@@ -10,86 +10,15 @@ import { StarRating } from './utils/StarRating';
 
 const backend = import.meta.env.VITE_BACKEND_URL;
 
-function DualRangeSlider({ min, max, step2, onRangeChange }) {
-    const [minValue, setMinValue] = useState(min);
-    const [maxValue, setMaxValue] = useState(max);
-
-    const handleRangeChange = (values) => {
-        setMinValue(values[0]);
-        setMaxValue(values[1]);
-        onRangeChange(values[0], values[1]); // Notify parent component with the new range values
-    };
-
-    const renderScale = () => {
-        const scaleMarks = [];
-        const step = step2;
-        for (let i = min; i <= max; i += step) {
-            scaleMarks.push(i);
-        }
-        return scaleMarks.map((mark) => (
-            <div
-                key={mark}
-                className="absolute bottom-6 text-xs"
-                style={{
-                    left: `${((mark - min) / (max - min)) * 100}%`,
-                    transform: "translateX(-50%)",
-                }}
-            >
-                {mark}
-            </div>
-        ));
-    };
-
-    return (
-        <div className="w-full p-2 relative pt-5">
-            <div className="relative w-full h-8">
-                <div className="absolute w-full h-2 bg-gray-300 rounded-lg mb-4 top-4">
-                    {renderScale()}
-                </div>
-            </div>
-
-            <Range
-                step={50}
-                min={min}
-                max={max}
-                values={[minValue, maxValue]}
-                onChange={handleRangeChange}
-                renderTrack={({ props, children }) => (
-                    <div
-                        {...props}
-                        className="w-full h-2 bg-gray-300 rounded-lg relative"
-                        style={{ marginTop: "-16px" }} // Adjust for overlap
-                    >
-                        <div
-                            className="absolute top-0 left-0 h-full bg-green-400 rounded-lg"
-                            style={{
-                                width: `${((maxValue - minValue) / (max - min)) * 100}%`,
-                                left: `${((minValue - min) / (max - min)) * 100}%`,
-                            }}
-                        />
-                        {children}
-                    </div>
-                )}
-                renderThumb={({ props }) => (
-                    <div {...props} className="w-6 h-6 bg-green-400 rounded-full" />
-                )}
-            />
-        </div>
-    );
-}
 
 function SearchMentor() {
     const [formDetails, setFormDetails] = useState({
         username: "",
         neetExamYear: "",
-        minBudget: 100,
-        maxBudget: 500,
-        city: "",
         state: "",
-        minNeetScore: 500,
-        maxNeetScore: 720,
         gender: "",
         neetAttempts: "",
+        category: "",
     });
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -148,29 +77,11 @@ function SearchMentor() {
         }));
     };
 
-    const handleBudgetChange = (min, max) => {
-        setFormDetails((prevDetails) => ({
-            ...prevDetails,
-            minBudget: min,
-            maxBudget: max,
-        }));
-    };
-
-    const handleScoreChange = (min, max) => {
-        setFormDetails((prevDetails) => ({
-            ...prevDetails,
-            minNeetScore: min,
-            maxNeetScore: max,
-        }));
-    };
-
     async function fetchUsers(page = 1) {
         try {
             setLoading(true)
             const response = await axios.get(`${backend}/api/v1/mentors/all-mentors?page=${page}`, formDetails)
             if (response.data.statusCode === 200) {
-                console.log(response.data.data.pagination);
-                
                 setUser(response.data.data.data)
                 setPagination(response.data.data.pagination)
                 setLoading(false)
@@ -271,8 +182,22 @@ function SearchMentor() {
                                     ? <div className='w-full h-auto flex flex-col my-5 font-cg-times'>
                                         <div className='w-full h-auto flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3'>
                                             <div className='w-full h-auto flex flex-col gap-2'>
-                                                <h1 className='text-sm font-semibold'>Average Budget</h1>
-                                                <DualRangeSlider min={100} max={500} step2={100} onRangeChange={handleBudgetChange} />
+                                                <h1 className='text-sm font-semibold'>Mentor Category</h1>
+                                                <div className='w-full h-auto flex'>
+                                                    <select className='w-full h-9 bg-white outline-none rounded-md border-[1px] border-gray-400'
+                                                        placeholder='Select Category'
+                                                        value={formDetails.category}
+                                                        onChange={(e) => handleChange("category", e.target.value)}
+                                                    >
+                                                        <option value="" disabled hidden>
+                                                            Select Category
+                                                        </option>
+                                                        <option value="M1">M1</option>
+                                                        <option value="M2">M2</option>
+                                                        <option value="M3">M3</option>
+                                                        <option value="M4">M4</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div className='w-full h-auto flex flex-col gap-2'>
                                                 <h1 className='text-sm font-semibold'>Location</h1>
@@ -295,10 +220,6 @@ function SearchMentor() {
                                             </div>
                                         </div>
                                         <div className='w-full h-auto flex flex-col gap-2 my-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3'>
-                                            <div className='w-full h-auto flex flex-col gap-2'>
-                                                <h1 className='text-sm font-semibold'>Score</h1>
-                                                <DualRangeSlider min={500} max={720} step2={50} onRangeChange={handleScoreChange} />
-                                            </div>
                                             <div className='w-full h-auto flex flex-col gap-3 justify-between my-3 sm:flex-row'>
                                                 <div className='bg-white w-full h-9 px-2 py-1 flex justify-center items-center rounded-md border-[1px] border-gray-400'>
                                                     <select className=' w-full bg-white outline-none rounded-md'
@@ -389,11 +310,23 @@ function SearchMentor() {
                             </button>
                         </div>
                     </div>
-                    <div className='w-full h-[400px] hidden lg:w-[35vw] lg:flex xl:w-[26vw] 2xl:h-[400px]'>
+                    <div className='w-full h-[300px] hidden lg:w-[35vw] lg:flex xl:w-[26vw] 2xl:h-[300px]'>
                         <div className='w-full h-auto flex lg:shadow-custom  lg:border-[1px] lg:rounded-xl lg:p-5 lg:font-cg-times lg:flex-col'>
                             <div className='w-full h-auto flex flex-col gap-2'>
-                                <h1 className='text-xl font-semibold'>Average Budget</h1>
-                                <DualRangeSlider min={100} max={500} step2={100} onRangeChange={handleBudgetChange} />
+                                <h1 className='text-xl font-semibold'>Mentor Category</h1>
+                                <select className='w-full h-9 bg-white outline-none rounded-md border-[1px] border-gray-400'
+                                    placeholder='Select Category'
+                                    value={formDetails.category}
+                                    onChange={(e) => handleChange("category", e.target.value)}
+                                >
+                                    <option value="" disabled hidden>
+                                        Select Category
+                                    </option>
+                                    <option value="M1">M1</option>
+                                    <option value="M2">M2</option>
+                                    <option value="M3">M3</option>
+                                    <option value="M4">M4</option>
+                                </select>
                             </div>
                             <div className='w-full h-auto flex flex-col gap-2 my-4'>
                                 <h1 className='text-xl font-semibold'>Location</h1>
@@ -413,10 +346,6 @@ function SearchMentor() {
                                         }
                                     </select>
                                 </div>
-                            </div>
-                            <div className='w-full h-auto flex flex-col gap-2'>
-                                <h1 className='text-xl font-semibold'>Score</h1>
-                                <DualRangeSlider min={500} max={720} step2={50} onRangeChange={handleScoreChange} />
                             </div>
                             <div className='w-full h-auto flex flex-row gap-3 justify-between my-4'>
                                 <div className='bg-white w-full h-9 px-2 py-1 flex justify-center items-center rounded-md border-[1px] border-gray-400'>
