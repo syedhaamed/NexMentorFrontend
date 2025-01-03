@@ -192,10 +192,10 @@ function SearchMentor() {
                                                         <option value="" disabled hidden>
                                                             Select Category
                                                         </option>
-                                                        <option value="M1">M1</option>
-                                                        <option value="M2">M2</option>
-                                                        <option value="M3">M3</option>
-                                                        <option value="M4">M4</option>
+                                                        <option value="M1">M1 (Upto 599)</option>
+                                                        <option value="M2">M2 (600 to 640)</option>
+                                                        <option value="M3">M3 (641 to 680)</option>
+                                                        <option value="M4">M4 (681 and 720)</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -322,10 +322,10 @@ function SearchMentor() {
                                     <option value="" disabled hidden>
                                         Select Category
                                     </option>
-                                    <option value="M1">M1</option>
-                                    <option value="M2">M2</option>
-                                    <option value="M3">M3</option>
-                                    <option value="M4">M4</option>
+                                    <option value="M1">M1 (Upto 599)</option>
+                                    <option value="M2">M2 (600 to 640)</option>
+                                    <option value="M3">M3 (641 to 680)</option>
+                                    <option value="M4">M4 (681 and 720)</option>
                                 </select>
                             </div>
                             <div className='w-full h-auto flex flex-col gap-2 my-4'>
