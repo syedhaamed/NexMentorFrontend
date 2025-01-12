@@ -27,7 +27,7 @@ function Help() {
                         <li><span className='font-bold'>Full Name: </span>So we can identify you as one of our mentors.</li>
                         <li><span className='font-bold'>Email Address: </span>To verify your account and contact you if needed.</li>
                         <li><span className='font-bold'>Detailed Query: </span>Describe your question or issue clearly.</li>
-                        <li><span className='font-bold'>Any Relevant Attachments: </span>f applicable, include screenshots or documents to help us understand your situation better.</li>
+                        <li><span className='font-bold'>Any Relevant Attachments: </span>If applicable, include screenshots or documents to help us understand your situation better.</li>
                     </ul>
                     <h2 className='text-lg md:text-xl font-bold'>Why Contact Us?</h2>
                     <ul className='my-5 list-inside list-disc md:text-lg'>

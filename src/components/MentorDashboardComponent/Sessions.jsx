@@ -78,11 +78,21 @@ function Sessions() {
   };
 
   function handleCompleted(requestId, studentId) {
-    setCompletePopUp(true)
-    setSingleRequestData({
-      requestId,
-      studentId
-    })
+    const item = activeSessions.find((item) => item._id === requestId);
+    const approvalTime = new Date(item.approvalTime);
+    const currentTime = new Date();
+    const timeDifference = currentTime - approvalTime;
+    const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+
+    if (item.package.packageName === 'Monthly Mentorship Package (1 Mentor : 1 Student)' && !(timeDifference > thirtyDaysInMs)) {
+      alert("You can mark this session as complete only after 30 days from the approval date.");
+    } else {
+      setCompletePopUp(true)
+      setSingleRequestData({
+        requestId,
+        studentId
+      })
+    }
   }
 
   function onClose() {
@@ -107,7 +117,7 @@ function Sessions() {
       // console.log(response.data);
 
       if (response.data.statusCode === 200) {
-        fetchActiveSessions(pagination.currentPage,mentorId)
+        fetchActiveSessions(pagination.currentPage, mentorId)
         setCompletePopUp(false)
         setSelectedImage(null)
         setLoading(false)
