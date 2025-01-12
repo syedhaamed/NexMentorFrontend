@@ -151,7 +151,13 @@ function Wallet() {
           <p className='w-full h-auto mt-3 text-sm md:text-base'>6. If you have already updated your payment details, you can skip this step and if you still do that then your previous payment details will be overridden.</p>
         </div>
         <div className='w-[95%] p-4 my-10 h-auto mx-auto flex flex-col gap-3 rounded-lg shadow-custom border text-xs md:text-base font-semibold'>
-          <p>"You come under the {mentorCategory} category (NEET score up to {mentorCategory === 'M1' ? '599' : mentorCategory === 'M2' ? '600-640' : mentorCategory === 'M3' ? '641-680' : '681-720'}). You will earn ₹{mentorCategory === 'M1' ? '120' : mentorCategory === 'M2' ? '150' : mentorCategory === 'M3' ? '180' : '210'} for each session completed. If you refer a student, you will receive an additional ₹50. This brings your total earning to ₹{mentorCategory === 'M1' ? '120' : mentorCategory === 'M2' ? '150' : mentorCategory === 'M3' ? '180' : '210'} + ₹50 = ₹{mentorCategory === 'M1' ? 120 + 50 : mentorCategory === 'M2' ? 150 + 50 : mentorCategory === 'M3' ? 180 + 50 : 210 + 50} per session."</p>
+          <p>" You are in the {mentorCategory} Category (NEET Score: Up to {mentorCategory === 'M1' ? '599' : mentorCategory === 'M2' ? '600-640' : mentorCategory === 'M3' ? '641-680' : '681-720'}): <br/> <br/>
+            1. 1:1 Monthly: ₹{mentorCategory === 'M1' ? '500' : mentorCategory === 'M2' ? '600' : mentorCategory === 'M3' ? '700' : '800'} <br/>
+            2. 1:1 One-Time: ₹{mentorCategory === 'M1' ? '120' : mentorCategory === 'M2' ? '150' : mentorCategory === 'M3' ? '180' : '210'}/session <br/>
+            3. 1:5 One-Time: ₹{mentorCategory === 'M1' ? '50' : mentorCategory === 'M2' ? '50' : mentorCategory === 'M3' ? '70' : '80'}/student (₹{mentorCategory === 'M1' ? '50' * 5 : mentorCategory === 'M2' ? '50' * 5 : mentorCategory === 'M3' ? '70' * 5 : '80' * 5} for 5 students) <br/><br/>
+            Referral Bonus: ₹50 <br/>
+            Prices update automatically; you’ll be notified via email.
+            "</p>
         </div>
         <div className='w-full h-auto flex flex-col'>
           <div className='w-full h-auto flex flex-wrap justify-center items-center gap-2 xl:gap-4'>

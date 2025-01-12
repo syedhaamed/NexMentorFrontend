@@ -14,6 +14,30 @@ function Referals() {
     setLocalSidebarState((prev) => !prev)
   }
 
+  function copyContent() {
+    const referralCode = userData?.referralsCode || "your-referral-code";
+    const referralLink = `https://www.nexmentor.com/signup`;
+    const content = `
+Unlock Your NEET Success with Guidance from Recent NEET Toppers with NEXMENTOR!
+
+• Choose your mentor based on state, score, gender, attempts, or NEET exam year.
+• Receive one-on-one guidance from recent NEET toppers now pursuing MBBS.
+• Get personalized study plans, detailed test analysis, and real-time support.
+• Gain exclusive access to free weekly webinars every Sunday.
+
+Referral Code: ${referralCode}
+
+How to Get Started:
+
+1. Visit the NEXMENTOR Registration Link: ${referralLink}
+2. Enter my referral code and book your first session.
+3. Limited Time Offer: Free Webinars Every Sunday!
+    `;
+
+    navigator.clipboard.writeText(content);
+    alert("Content copied to clipboard!");
+  }
+
   return (
     <div className='w-full h-auto flex flex-col bg-[#F4F4F4] lg:w-[70%] xl:w-[75%] 2xl:w-[80%]'>
       <Header getData={getUserData} handleStateChange={handleStateChange} />
@@ -44,11 +68,43 @@ function Referals() {
           <p className='text-sm lg:text-base my-3'>Start Referring students today and earn rewards !</p>
           <p className='text-sm lg:text-base'>If you have any questions, feel free to reach out</p>
         </div>
-        <div className='w-full h-auto flex items-center mt-7 justify-center'>
-          <span className='p-5 bg-gray-100 flex flex-col rounded-xl gap-3 font-cg-times items-center xl:px-10'>
-            <span className='text-3xl font-bold '>Referral Code</span>
-            <span className='text-lg font-semibold text-blue-500'>{userData?.referralsCode}</span>
-          </span>
+        <div className='w-full h-auto flex flex-col bg-gray-100 p-3 lg:p-5 rounded-lg mt-5'>
+          <div className='w-full h-auto flex flex-col mt-5 font-cg-times'>
+            <h1 className='text-base lg:text-xl font-semibold'>
+              Unlock Your NEET Success with Guidance from Recent NEET Toppers with NEXMENTOR!
+            </h1>
+            <p className='text-sm lg:text-base mt-3'>
+            • Choose your mentor based on state, score, gender, attempts, or NEET exam year.
+            </p>
+            <p className='text-sm lg:text-base'>
+            • Receive one-on-one guidance from recent NEET toppers now pursuing MBBS.
+            </p>
+            <p className='text-sm lg:text-base'>
+            • Get personalized study plans, detailed test analysis, and real-time support.
+            </p>
+            <p className='text-sm lg:text-base'>
+            • Gain exclusive access to free weekly webinars every Sunday.
+            </p>
+            <p className='text-sm lg:text-base font-bold my-3'>
+              Referral Code: <span className='text-blue-500'>{userData?.referralsCode || 'your-referral-code'}</span>
+            </p>
+            <h2 className='font-semibold lg:text-lg mb-3'>How to Get Started:</h2>
+            <ul className='list-disc list-inside text-sm lg:text-base'>
+              <li>Visit <span className='text-blue-500 underline cursor-pointer underline-offset-4'>NEXMENTOR Registration Link</span>.</li>
+              <li>Enter my referral code and book your first session.</li>
+            </ul>
+            <p className='text-sm lg:text-base my-3 font-semibold'>
+              Limited Time Offer: Free Webinars Every Sunday!
+            </p>
+          </div>
+          <div className='w-full h-auto flex items-center mt-7 justify-center'>
+            <button
+              onClick={copyContent}
+              className='p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-semibold'
+            >
+              Copy and Share Referral Link
+            </button>
+          </div>
         </div>
       </div>
     </div>
