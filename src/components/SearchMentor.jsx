@@ -281,7 +281,12 @@ function SearchMentor() {
                                                 </div>
                                             </div>
                                             <span className='px-2 text-gray-500 text-sm md:text-base'>{user.institute}</span>
-                                            <span className='px-2 text-gray-500 text-sm md:text-base'>Neet Score : {user.neetScore}</span>
+                                            <div className='w-full h-auto flex justify-between items-center'>
+                                                <span className='px-2 text-gray-500 text-sm md:text-base'>Neet Score : {user.neetScore}</span>
+                                                {
+                                                    user.airRank && <span className='px-2 text-gray-500 text-sm md:text-base'>AIR Rank : {user.airRank}</span>
+                                                }
+                                            </div>
                                             <NavLink to={`/single-mentor/${user._id}`} className='bg-[#0092DB] text-white text-center mt-3 py-1.5 rounded-x-sm rounded-b-md cursor-pointer active:bg-[#0092dbc3] md:hover:bg-[#0092dbc3]'>Book a Session</NavLink>
                                         </div>
                                     ))

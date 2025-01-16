@@ -24,7 +24,8 @@ function ProfileSetting() {
     neetScore: '',
     neetExamYear: '',
     yearOfEducation: '',
-    about: ''
+    about: '',
+    airRank: ''
   })
   const [previewImage, setPreviewImage] = useState(null)
   const [selectedImage, setSelectedImage] = useState(null)
@@ -52,7 +53,8 @@ function ProfileSetting() {
       neetScore: e.neetScore,
       neetExamYear: e.neetExamYear,
       yearOfEducation: e.yearOfEducation,
-      about: e?.about || ''
+      about: e?.about || '',
+      airRank: e?.airRank || ''
     })
     setPreviewImage(e.profilePicture)
     setSelectedLanguages(e.languages)
@@ -143,6 +145,7 @@ function ProfileSetting() {
       formData.append('yearOfEducation', updateDetails.yearOfEducation);
       formData.append('gender', updateDetails.gender);
       formData.append('about', updateDetails.about);
+      formData.append('airRank', updateDetails.airRank);
       formData.append('mentorId', mentorId);
 
       if (selectedLanguages.length > 0) {
@@ -368,7 +371,16 @@ function ProfileSetting() {
                 </Select>
               </FormControl>
             </div>
-            <textarea name="about" value={updateDetails.about} onChange={(e) => setUpdateDetails({ ...updateDetails, about: e.target.value })} placeholder='Write about yourself here' className='min-h-40 p-2 bg-[#F4F4F4] border-[1px] border-gray-400 resize-none'></textarea>
+            <TextField
+              label="AIR Rank"
+              variant="outlined"
+              margin="normal"
+              type='number'
+              className='w-full'
+              value={updateDetails.airRank}
+              onChange={(e) => setUpdateDetails({ ...updateDetails, airRank: e.target.value })}
+            />
+            <textarea name="about" value={updateDetails.about} onChange={(e) => setUpdateDetails({ ...updateDetails, about: e.target.value })} placeholder='Write about yourself here' className='min-h-40 p-2 mt-3 bg-[#F4F4F4] border-[1px] border-gray-400 resize-none'></textarea>
           </div>
           <div className='w-full h-auto flex justify-center items-center lg:w-[40%] lg:items-start lg:pt-10 xl:w-[30%]'>
             <div className='w-[90%] h-auto flex flex-col gap-3 lg:border-[1px] rounded-lg lg:border-gray-300 lg:py-10 lg:shadow-custom lg:gap-6'>

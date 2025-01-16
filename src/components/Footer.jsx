@@ -71,7 +71,7 @@ function Footer() {
           <div className='w-f h-auto flex flex-col gap-4 mt-4'>
             <p className='text-sm flex items-center justify-center gap-2 md:justify-start mt-5 xl:text-base'><FaLocationDot size={20} />New Light Colony, Sopore, Baramulla, Jammu and Kashmir, India - 193201</p>
             <p className='text-sm flex items-center justify-center gap-2 md:justify-start xl:text-base'><CiMail size={20} /> support@nexmentor.com</p>
-            <p className='text-sm flex items-center justify-center gap-2 md:justify-start xl:text-base'><FaPhoneAlt size={20} /> +91 91039 02768</p>
+            {/* <p className='text-sm flex items-center justify-center gap-2 md:justify-start xl:text-base'><FaPhoneAlt size={20} /> +91 91039 02768</p> */}
           </div>
         </div>
       </div>

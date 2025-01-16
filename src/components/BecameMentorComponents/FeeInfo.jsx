@@ -10,7 +10,7 @@ function FeeInfo() {
                     <p className="py-1.5 border-l-2 px-3 md:text-lg font-semibold md:py-2 border-l-black text-[#000B26]">
                         Why We Charge?
                     </p>
-                    <p className='mt-4'><span className='font-bold'>Note:</span> "Apply as a mentor for FREE until January 15, 2025. After that, a one-time application fee of ₹149 will apply."</p>
+                    <p className='mt-4'><span className='font-bold'>Note:</span> "Apply as a mentor for FREE until Febrauary 15, 2025. After that, a one-time application fee of ₹149 will apply."</p>
                     <div className="w-full h-auto flex flex-col text-3xl font-bold mt-5 gap-2 md:gap-4 xl:text-5xl">
                         <h2>Why We Charge a</h2>
                         <h2>One-Time Application</h2>

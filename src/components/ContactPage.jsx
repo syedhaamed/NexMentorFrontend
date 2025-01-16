@@ -83,10 +83,10 @@ function ContactPage() {
                                 <MdEmail size={20} />
                                 <p className='text-sm xl:text-base'>support@nexmentor.com</p>
                             </div>
-                            <div className='w-full h-auto flex gap-2 text-white'>
+                            {/* <div className='w-full h-auto flex gap-2 text-white'>
                                 <FaPhoneAlt size={20} />
                                 <p className='text-sm xl:text-base'>+91 91039 02768</p>
-                            </div>
+                            </div> */}
                         </div>
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Open hours</p>
                         <p className='text-sm text-white xl:text-base'>09:00 AM to 09:00 PM</p>

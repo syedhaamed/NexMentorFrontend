@@ -40,7 +40,7 @@ function SingleMentor() {
 
   async function bookSession(id) {
     try {
-      alert("Session Booking will be Starting from 16 January 2025.")
+      alert("Session Booking will be Starting from 21 January 2025.")
       // const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
       // const data = response.data.data
 
@@ -133,6 +133,11 @@ function SingleMentor() {
                       }
                     </div>
                     <div className='text-xs text-gray-500 flex justify-between sm:text-sm lg:mt-3'><span>Neet Score : {user.neetScore}</span> <span>{user.gender}</span></div>
+                    <div className='text-xs text-gray-500 flex justify-between sm:text-sm'>
+                      {
+                        user.airRank && <span className='text-gray-500 text-sm md:text-base'>AIR Rank : {user.airRank}</span>
+                      }
+                    </div>
                     <div className='text-xs text-gray-500 flex sm:text-sm mt-1'>{user.institute}, {user.address?.state}</div>
                     <div className='hidden lg:flex lg:items-center lg:gap-2 lg:mt-4'>
                       {
