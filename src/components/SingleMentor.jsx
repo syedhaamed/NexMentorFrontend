@@ -38,42 +38,54 @@ function SingleMentor() {
     }
   }
 
-  async function bookSession(id) {
+  async function bookSession(id, packagePrice) {
     try {
       alert("Session Booking will be Starting from 21 January 2025.")
-      // const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
-      // const data = response.data.data
 
-      // const paymentObject = new window.Razorpay({
-      //   key: "rzp_live_b0TsznPSQSsjx8",
-      //   order_id: data.id,
-      //   ...data,
-      //   handler: function (response) {
-      //     const option2 = {
-      //       orderId: response.razorpay_order_id,
-      //       paymentId: response.razorpay_payment_id,
-      //       signature: response.razorpay_signature,
-      //       packageId: id,
-      //       studentId: studentId
-      //     }
-      //     axios.post(`${backend}/api/v1/students/verify-payment`, option2)
-      //       .then((response) => {
-      //         if (response.data.success === true) {
-      //           setLoading(true)
-      //           dispatch(triggerHeaderUpdate());
-      //           navigate("/student-profile")
-      //         } else {
+      // if (packagePrice === 0) {
+      //   const response = await axios.post(`${backend}/api/v1/students/free-session`, { packageId: id, studentId: studentId })
+      //   if (response.data.statusCode === 200) {
+      //     setLoading(true)
+      //     dispatch(triggerHeaderUpdate());
+      //     setTimeout(() => {
+      //       navigate("/student-profile")
+      //     }, 2000);
+      //   }
+      // } else {
+      //   const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
+      //   const data = response.data.data
+
+      //   const paymentObject = new window.Razorpay({
+      //     key: "rzp_live_b0TsznPSQSsjx8",
+      //     order_id: data.id,
+      //     ...data,
+      //     handler: function (response) {
+      //       const option2 = {
+      //         orderId: response.razorpay_order_id,
+      //         paymentId: response.razorpay_payment_id,
+      //         signature: response.razorpay_signature,
+      //         packageId: id,
+      //         studentId: studentId
+      //       }
+      //       axios.post(`${backend}/api/v1/students/verify-payment`, option2)
+      //         .then((response) => {
+      //           if (response.data.success === true) {
+      //             setLoading(true)
+      //             dispatch(triggerHeaderUpdate());
+      //             navigate("/student-profile")
+      //           } else {
+      //             setErrorMsg(error.response.data.message)
+      //             setErrorPopUp(true)
+      //           }
+      //         }).catch((error) => {
+      //           console.log(error);
       //           setErrorMsg(error.response.data.message)
       //           setErrorPopUp(true)
-      //         }
-      //       }).catch((error) => {
-      //         console.log(error);
-      //         setErrorMsg(error.response.data.message)
-      //         setErrorPopUp(true)
-      //       })
-      //   }
-      // })
-      // paymentObject.open()
+      //         })
+      //     }
+      //   })
+      //   paymentObject.open()
+      // }
     } catch (error) {
       console.log("error while booking session", error);
       setErrorMsg(error.response?.data?.message || "An error occurred");
@@ -163,13 +175,18 @@ function SingleMentor() {
               <div id='package' className='w-full h-auto grid grid-cols-1 gap-6 lg:grid-cols-2 2xl:grid-cols-3 place-items-center place-content-center py-5 xl:py-10'>
                 {
                   user.package?.map((item, index) => (
-                    <div key={index} className='w-[95%] h-auto flex flex-col bg-[#DAE8FB] p-3 gap-3 rounded-md sm:w-[75%] xl:gap-6 md:w-[70%] lg:w-full lg:h-[100%] md:p-8'>
+                    <div key={index} className='w-[95%] h-auto flex flex-col bg-[#DAE8FB] p-3 gap-3 rounded-md sm:w-[75%] xl:gap-4 md:w-[70%] lg:w-full lg:h-[100%] md:p-8'>
                       <div className='w-full h-auto font-cg-times flex justify-between items-center'>
                         <span className='text-sm w-[80%] md:text-base font-semibold'>{item.packageName}</span>
                       </div>
                       <p style={{ whiteSpace: "pre-wrap" }} dangerouslySetInnerHTML={{ __html: item.packageDescription }} className='w-full h-auto font-cg-times text-[#2E2E2E] text-xs md:text-base' />
-                      <div className='w-full h-auto flex justify-end items-center gap-1 text-sm md:text-lg font-semibold'>₹ {item.packagePrice} <span className='text-xs line-through font-extralight'>₹ {item.realPackagePrice}</span> <span className='hidden md:block text-xs font-extralight'>(Save ₹{item.realPackagePrice - item.packagePrice})</span> </div>
-                      <div onClick={() => studentId === '' ? navigate('/login') : bookSession(item._id)} className='w-full h-auto bg-[#0092DB] flex justify-center items-center text-white py-1 mt-2 cursor-pointer md:py-1.5 md:hover:bg-[#0092dbb6] active:bg-[#0092dbb6] rounded-sm'>Book Session</div>
+                      <div className='w-full h-auto flex justify-end items-center gap-1 text-sm md:text-lg font-semibold'>{item.packagePrice === 0 ? 'Free' : '₹' + item.packagePrice} {item.packagePrice === 0 ? '' : <><span className='text-xs line-through font-extralight'>₹ {item.realPackagePrice}</span> <span className='hidden md:block text-xs font-extralight'>(Save ₹{item.realPackagePrice - item.packagePrice})</span></>}  </div>
+                      <div className='w-full h-auto flex justify-end text-sm font-cg-times gap-1' style={{ textShadow: '1px 1px 2px #000000' }}>
+                        <span style={{ color: '#FF9933' }}>Special </span>
+                        <span style={{ color: '#FFFFFF' }}>Republic </span>
+                        <span style={{ color: '#138808' }}>Day Off %</span>
+                      </div>
+                      <div onClick={() => studentId === '' ? navigate('/login') : bookSession(item._id, item.packagePrice)} className='w-full h-auto bg-[#0092DB] flex justify-center items-center text-white py-1 mt-2 cursor-pointer md:py-1.5 md:hover:bg-[#0092dbb6] active:bg-[#0092dbb6] rounded-sm'>Book Session</div>
                     </div>
                   ))
                 }

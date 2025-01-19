@@ -5,6 +5,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
+import { FaTelegramPlane } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import { CiMail } from "react-icons/ci";
 import axios from 'axios'
@@ -42,9 +43,9 @@ function Footer() {
           <p className='text-center text-sm mt-4 md:text-start xl:text-base'>At NexMentor, we believe success in NEET goes beyond quality study material—it requires the right mentorship to turn knowledge into results. While online coaching offers great content, it often misses the personalized guidance needed to enhance a student’s preparation and confidence.</p>
           <div className='w-full h-auto mt-7 flex items-center justify-center gap-5 md:justify-start'>
             <NavLink to='https://www.instagram.com/nexmentor.in/?utm_source=ig_web_button_share_sheet' target='_blank'><FaInstagram size={25} /></NavLink>
-            <NavLink to='https://www.linkedin.com/company/nexmentor' target='_blank'><MdFacebook size={25} /></NavLink>
+            <NavLink to='https://t.me/nexmentorneet' target='_blank'><FaTelegramPlane size={25} /></NavLink>
             <NavLink to='https://www.linkedin.com/company/nexmentor' target='_blank'><FaLinkedin size={25} /></NavLink>
-            <NavLink to='https://www.linkedin.com/company/nexmentor' target='_blank'><FaYoutube size={25} /></NavLink>
+            <NavLink to='https://www.youtube.com/@nexmentorindia' target='_blank'><FaYoutube size={25} /></NavLink>
           </div>
         </div>
         <div className='w-full h-auto flex justify-between px-3 sm:gap-20 sm:justify-center'>

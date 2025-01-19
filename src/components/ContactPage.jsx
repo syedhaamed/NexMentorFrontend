@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { MdEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
+import { FaTelegramPlane } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { MdFacebook } from "react-icons/md";
 import { FaLinkedin } from "react-icons/fa";
@@ -95,9 +96,9 @@ function ContactPage() {
                         <p className='text-[#9C9C9C] my-3 xl:text-lg xl:my-4'>Follow us</p>
                         <div className='w-full h-auto flex items-center gap-4 text-white'>
                             <NavLink to='https://www.instagram.com/nexmentor.in/?utm_source=ig_web_button_share_sheet' target='_blank'><FaInstagram size={25} /></NavLink>
-                            <MdFacebook size={25} />
+                            <NavLink to='https://t.me/nexmentorneet' target='_blank'><FaTelegramPlane size={25} /></NavLink>
                             <NavLink to='https://www.linkedin.com/company/nexmentor' target='_blank'><FaLinkedin size={25} /></NavLink>
-                            <FaYoutube size={25} />
+                            <NavLink to='https://www.youtube.com/@nexmentorindia' target='_blank'><FaYoutube size={25} /></NavLink>
                         </div>
                     </div>
                 </div>
