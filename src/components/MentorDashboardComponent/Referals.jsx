@@ -46,14 +46,14 @@ How to Get Started:
         <div className='w-full h-auto flex flex-col mt-5 font-cg-times'>
           <h1 className='text-base sm:text-xl font-semibold lg:text-2xl'>NexMentor Refer and Earn Program</h1>
           <p className='text-sm lg:text-base my-3'>Dear Mentor,</p>
-          <p className='text-sm lg:text-base'>We're excited to introduce the <span className='font-semibold'>NexMentor Refer and Earn Program</span>, where you can earn <span className='font-semibold'>₹50</span> for every successful student referral.</p>
+          <p className='text-sm lg:text-base'>We're excited to introduce the <span className='font-semibold'>NexMentor Refer and Earn Program</span>, where you can earn <span className='font-semibold'>₹30</span> for every successful student referral.</p>
           <h2 className='font-semibold lg:text-lg mt-6 mb-8'>How It Works:</h2>
           <h3 className='font-semibold lg:text-lg mb-3 pl-8'>1. Share Your Unique Referral Code:</h3>
           <p className='pl-8 text-sm lg:text-base'>You will receive a unique referral code <span className='font-semibold'>below</span> . share this code with students who could benefit from mentorship.</p>
           <h3 className='font-semibold lg:text-lg my-3 pl-8'>2. Student Sign Up:</h3>
           <p className='pl-8 text-sm lg:text-base'>Students must use your referral code during sign-up</p>
           <h3 className='font-semibold lg:text-lg my-3 pl-8'>3. Earn Rewards:</h3>
-          <p className='pl-8 text-sm lg:text-base'>You will earn <span className='font-semibold'>₹50</span> when a referral student:</p>
+          <p className='pl-8 text-sm lg:text-base'>You will earn <span className='font-semibold'>₹30</span> when a referral student:</p>
           <ul className='my-3 list-disc list-inside pl-8 mb-8 text-sm lg:text-base'>
             <li>Signs up using your referral code.</li>
             <li>Books and completes their first session.</li>
