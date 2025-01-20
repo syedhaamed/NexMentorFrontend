@@ -40,52 +40,51 @@ function SingleMentor() {
 
   async function bookSession(id, packagePrice) {
     try {
-      alert("Session Booking will be Starting from 21 January 2025.")
+      // alert("Session Booking will be Starting from 21 January 2025.")
+      if (packagePrice === 0) {
+        setLoading(true)
+        const response = await axios.post(`${backend}/api/v1/students/free-session`, { packageId: id, studentId: studentId })
+        if (response.data.statusCode === 200) {
+          dispatch(triggerHeaderUpdate());
+          setTimeout(() => {
+            navigate("/student-profile")
+          }, 2000);
+        }
+      } else {
+        const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
+        const data = response.data.data
 
-      // if (packagePrice === 0) {
-      //   const response = await axios.post(`${backend}/api/v1/students/free-session`, { packageId: id, studentId: studentId })
-      //   if (response.data.statusCode === 200) {
-      //     setLoading(true)
-      //     dispatch(triggerHeaderUpdate());
-      //     setTimeout(() => {
-      //       navigate("/student-profile")
-      //     }, 2000);
-      //   }
-      // } else {
-      //   const response = await axios.post(`${backend}/api/v1/students/create-order`, { packageId: id })
-      //   const data = response.data.data
-
-      //   const paymentObject = new window.Razorpay({
-      //     key: "rzp_live_b0TsznPSQSsjx8",
-      //     order_id: data.id,
-      //     ...data,
-      //     handler: function (response) {
-      //       const option2 = {
-      //         orderId: response.razorpay_order_id,
-      //         paymentId: response.razorpay_payment_id,
-      //         signature: response.razorpay_signature,
-      //         packageId: id,
-      //         studentId: studentId
-      //       }
-      //       axios.post(`${backend}/api/v1/students/verify-payment`, option2)
-      //         .then((response) => {
-      //           if (response.data.success === true) {
-      //             setLoading(true)
-      //             dispatch(triggerHeaderUpdate());
-      //             navigate("/student-profile")
-      //           } else {
-      //             setErrorMsg(error.response.data.message)
-      //             setErrorPopUp(true)
-      //           }
-      //         }).catch((error) => {
-      //           console.log(error);
-      //           setErrorMsg(error.response.data.message)
-      //           setErrorPopUp(true)
-      //         })
-      //     }
-      //   })
-      //   paymentObject.open()
-      // }
+        const paymentObject = new window.Razorpay({
+          key: "rzp_live_b0TsznPSQSsjx8",
+          order_id: data.id,
+          ...data,
+          handler: function (response) {
+            const option2 = {
+              orderId: response.razorpay_order_id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+              packageId: id,
+              studentId: studentId
+            }
+            axios.post(`${backend}/api/v1/students/verify-payment`, option2)
+              .then((response) => {
+                if (response.data.success === true) {
+                  setLoading(true)
+                  dispatch(triggerHeaderUpdate());
+                  navigate("/student-profile")
+                } else {
+                  setErrorMsg(error.response.data.message)
+                  setErrorPopUp(true)
+                }
+              }).catch((error) => {
+                console.log(error);
+                setErrorMsg(error.response.data.message)
+                setErrorPopUp(true)
+              })
+          }
+        })
+        paymentObject.open()
+      }
     } catch (error) {
       console.log("error while booking session", error);
       setErrorMsg(error.response?.data?.message || "An error occurred");

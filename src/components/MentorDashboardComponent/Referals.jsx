@@ -94,7 +94,7 @@ How to Get Started:
               <li>Enter my referral code and book your first session.</li>
             </ul>
             <p className='text-sm lg:text-base my-3 font-semibold'>
-              Limited Time Offer: Free Webinars Every Sunday!
+              Limited Time Offer: Free Demo Sessions!
             </p>
           </div>
           <div className='w-full h-auto flex items-center mt-7 justify-center'>
