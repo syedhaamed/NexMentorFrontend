@@ -49,8 +49,8 @@ function Chats() {
                 {
                     chattingToUser?.map((mentors, index) => (
                         <NavLink to={`/student-profile/${mentors._id}`} className={`${id ? 'hidden xl:flex' : 'flex xl:flex'} w-full h-auto p-3 shadow-sm cursor-pointer active:bg-gray-50 md:hover:bg-gray-50`} key={index}>
-                            <div className='w-16 h-auto'>
-                                <img src={mentors.profilePicture} alt="profile picture" className='rounded-full border-[1px] border-blue-500' />
+                            <div className='w-20 h-20'>
+                                <img src={mentors.profilePicture} alt="profile picture" className='rounded-full object-cover w-full h-full border-[1px] border-blue-500' />
                             </div>
                             <div className='h-auto flex-1 flex flex-col px-2 xl:px-4'>
                                 <span className='font-cg-times md:text-lg'>{mentors.mentorId}</span>
