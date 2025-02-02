@@ -68,8 +68,49 @@ How to Get Started:
           <p className='text-sm lg:text-base my-3'>Start Referring students today and earn rewards !</p>
           <p className='text-sm lg:text-base'>If you have any questions, feel free to reach out</p>
         </div>
-        <div className='w-full h-auto flex flex-col bg-gray-100 p-3 lg:p-5 rounded-lg mt-5'>
+        {/* <div className='w-full h-auto flex flex-col bg-gray-100 p-3 lg:p-5 rounded-lg mt-5'>
           <div className='w-full h-auto flex flex-col mt-5 font-cg-times'>
+            <h1 className='text-base lg:text-xl font-semibold'>
+              Unlock Your NEET Success with Guidance from Recent NEET Toppers with NEXMENTOR!
+            </h1>
+            <p className='text-sm lg:text-base mt-3'>
+            • Choose your mentor based on state, score, gender, attempts, or NEET exam year.
+            </p>
+            <p className='text-sm lg:text-base'>
+            • Receive one-on-one guidance from recent NEET toppers now pursuing MBBS.
+            </p>
+            <p className='text-sm lg:text-base'>
+            • Get personalized study plans, detailed test analysis, and real-time support.
+            </p>
+            <p className='text-sm lg:text-base'>
+            • Gain exclusive access to free weekly webinars every Sunday.
+            </p>
+            <p className='text-sm lg:text-base font-bold my-3'>
+              Referral Code: <span className='text-blue-500'>{userData?.referralsCode || 'your-referral-code'}</span>
+            </p>
+            <h2 className='font-semibold lg:text-lg mb-3'>How to Get Started:</h2>
+            <ul className='list-disc list-inside text-sm lg:text-base'>
+              <li>Visit <span className='text-blue-500 underline cursor-pointer underline-offset-4'>NEXMENTOR Registration Link</span>.</li>
+              <li>Enter my referral code and book your first session.</li>
+            </ul>
+            <p className='text-sm lg:text-base my-3 font-semibold'>
+              Limited Time Offer: Free Demo Sessions!
+            </p>
+          </div>
+          <div className='w-full h-auto flex items-center mt-7 justify-center'>
+            <button
+              onClick={copyContent}
+              className='p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-semibold'
+            >
+              Copy and Share Referral Link
+            </button>
+          </div>
+        </div> */}
+        <div className='w-full h-auto flex flex-col bg-gray-100 p-3 lg:p-5 rounded-lg mt-5 relative select-none'>
+          <div className='absolute inset-0 bg-white opacity-70 flex items-center justify-center'>
+            <p className='text-xl font-semibold'>Referral system will be available from May</p>
+          </div>
+          <div className='w-full h-auto flex flex-col mt-5 font-cg-times blur-sm'>
             <h1 className='text-base lg:text-xl font-semibold'>
               Unlock Your NEET Success with Guidance from Recent NEET Toppers with NEXMENTOR!
             </h1>

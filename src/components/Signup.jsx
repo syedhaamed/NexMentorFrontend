@@ -245,7 +245,7 @@ function Signup() {
                       onChange={(e) => handleChange(e)}
                     />
                   </div>
-                  <TextField
+                  {/* <TextField
                     label="Referral Code (If you have)"
                     variant="outlined"
                     fullWidth
@@ -253,7 +253,7 @@ function Signup() {
                     value={accountData.student.referralCode}
                     name='referralCode'
                     onChange={(e) => handleChange(e)}
-                  />
+                  /> */}
                   <div className='flex gap-2 items-center'>
                     <input type="checkbox" id='agree' className='size-3' value={accountData.student.check} onChange={(event) =>
                       setAccountData((prevState) => ({
