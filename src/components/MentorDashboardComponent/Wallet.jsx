@@ -152,10 +152,12 @@ function Wallet() {
         </div>
         <div className='w-[95%] p-4 my-10 h-auto mx-auto flex flex-col gap-3 rounded-lg shadow-custom border text-xs md:text-base font-semibold'>
           <p>" You are in the {mentorCategory} Category (NEET Score: Up to {mentorCategory === 'M1' ? '599' : mentorCategory === 'M2' ? '600-640' : mentorCategory === 'M3' ? '641-680' : '681-720'}): <br /> <br />
-            1:1 Monthly: ₹{mentorCategory === 'M1' ? '430' : mentorCategory === 'M2' ? '510' : mentorCategory === 'M3' ? '580' : '660'} <br />
+            {/* 1:1 Monthly: ₹{mentorCategory === 'M1' ? '430' : mentorCategory === 'M2' ? '510' : mentorCategory === 'M3' ? '580' : '660'} <br />
             1:1 One-Time: ₹{mentorCategory === 'M1' ? '100' : mentorCategory === 'M2' ? '130' : mentorCategory === 'M3' ? '160' : '190'}/session <br />
             1:5 One-Time: ₹{mentorCategory === 'M1' ? '33' : mentorCategory === 'M2' ? '43' : mentorCategory === 'M3' ? '53' : '63'}/student (₹{mentorCategory === 'M1' ? '33' * 5 : mentorCategory === 'M2' ? '43' * 5 : mentorCategory === 'M3' ? '53' * 5 : '63' * 5} for 5 students) <br /><br />
-            Referral Bonus: ₹30 <br />
+            Referral Bonus: ₹30 <br /> */}
+            20 mints : ₹ {mentorCategory === 'M1' ? '25' : mentorCategory === 'M2' ? '30' : mentorCategory === 'M3' ? '35' : '40'} <br />
+            60 mints : ₹ {mentorCategory === 'M1' ? '80' : mentorCategory === 'M2' ? '90' : mentorCategory === 'M3' ? '110' : '120'} <br />
             Prices update automatically; you’ll be notified via email.
             "</p>
         </div>
