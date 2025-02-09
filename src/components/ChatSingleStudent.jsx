@@ -153,7 +153,7 @@ function ChatSingle() {
                         <img
                             src={userData.profilePicture}
                             alt="profile Image"
-                            className='w-8 h-8 2xl:w-10 2xl:h-10 bg-gray-200 rounded-full border-[1px] border-blue-500'
+                            className='w-8 h-8 2xl:w-10 2xl:h-10 bg-gray-200 rounded-full object-cover border-[1px] border-blue-500'
                         />
                         <span className='font-semibold'>{userData.mentorId}</span>
                     </div>
@@ -187,7 +187,7 @@ function ChatSingle() {
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' ? handleSubmitMessage() : null}
-                                className='w-full h-full px-1 outline-none bg-white'
+                                className='w-full h-full px-1 outline-none bg-transparent'
                             />
                         </div>
                         <div className='p-1.5 rounded-full bg-gray-200 flex items-center cursor-pointer'>

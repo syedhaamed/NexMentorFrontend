@@ -18,32 +18,53 @@ import { jwtDecode } from "jwt-decode";
 const backend = import.meta.env.VITE_BACKEND_URL;
 
 
+// function AllTabs({ options, data, handleToChat }) {
+//   const { id } = useParams()
+//   const navigate = useNavigate()
+//   if (options === 'accountInformation') {
+//     if (id) {
+//       navigate('/student-profile', { replace: true });
+//     }
+//     return <AccountInformation data={data} />
+
+//   }
+//   else if (options === 'sessionManagement') {
+//     if (id) {
+//       navigate('/student-profile', { replace: true });
+//     }
+//     return <SessionManagement handleToChat={handleToChat} />
+//   }
+//   else if (options === 'chats') {
+//     return <Chats />
+//   }
+//   else {
+//     if (id) {
+//       navigate('/student-profile', { replace: true });
+//     }
+//     return <CompletedSessions />
+//   }
+
+// }
+
 function AllTabs({ options, data, handleToChat }) {
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (options !== 'chats' && id) {
+      navigate('/student-profile', { replace: true });
+    }
+  }, [options, id, navigate]);
+
   if (options === 'accountInformation') {
-    if (id) {
-      navigate('/student-profile', { replace: true });
-    }
-    return <AccountInformation data={data} />
-
+    return <AccountInformation data={data} />;
+  } else if (options === 'sessionManagement') {
+    return <SessionManagement handleToChat={handleToChat} />;
+  } else if (options === 'chats') {
+    return <Chats />;
+  } else {
+    return <CompletedSessions />;
   }
-  else if (options === 'sessionManagement') {
-    if (id) {
-      navigate('/student-profile', { replace: true });
-    }
-    return <SessionManagement handleToChat={handleToChat} />
-  }
-  else if (options === 'chats') {
-    return <Chats />
-  }
-  else {
-    if (id) {
-      navigate('/student-profile', { replace: true });
-    }
-    return <CompletedSessions />
-  }
-
 }
 
 function LogoutDialog({ handleClose, handleLogout }) {
@@ -176,18 +197,18 @@ function StudentProfile() {
               </div>
             </div>
           </div>
+          <div className='w-full h-auto flex flex-wrap gap-1 md:hidden'>
+            <div onClick={() => setOptions('accountInformation')} className={`${options === 'accountInformation' ? 'bg-blue-100 text-blue-500' : 'text-black bg-gray-100'} w-full h-auto mt-5 flex gap-5 py-2 items-center px-2 rounded-md cursor-pointer hover:md:bg-blue-100 hover:md:text-blue-500`} ><FaUser size={20} /> Account Information</div>
+            <div onClick={() => setOptions('sessionManagement')} className={`${options === 'sessionManagement' ? 'bg-blue-100 text-blue-500' : 'text-black bg-gray-100'} w-full h-auto my-3 flex gap-5 py-2 items-center px-2 rounded-md cursor-pointer hover:md:bg-blue-100 hover:md:text-blue-500`}><MdManageSearch size={20} /> Session Management</div>
+            <div onClick={() => setOptions('chats')} className={`${options === 'chats' ? 'bg-blue-100 text-blue-500' : 'text-black bg-gray-100'} w-full h-auto mb-3 flex gap-5 py-2 items-center px-2 rounded-md cursor-pointer hover:md:bg-blue-100 hover:md:text-blue-500`}><BsChatSquareTextFill size={20} /> Chats</div>
+            <div onClick={() => setOptions('completedSessions')} className={`${options === 'completedSessions' ? 'bg-blue-100 text-blue-500' : 'text-black bg-gray-100'} w-full h-auto flex gap-5 py-2 items-center px-2 rounded-md cursor-pointer hover:md:bg-blue-100 hover:md:text-blue-500`}><GrCompliance size={20} /> Compeleted Sessions</div>
+          </div>
           <AllTabs data={userDetails} options={options} handleToChat={handleToChat} />
           {
             options === 'chats' && id && <div className='hidden xl:flex xl:w-[40vw] xl:h-[80vh] xl:pt-10'>
               <ChatSingle />
             </div>
           }
-
-          <div className='w-full h-auto flex flex-col gap-3 md:hidden'>
-            <SessionManagement />
-            <Chats />
-            <CompletedSessions />
-          </div>
           <div className='w-full h-auto flex justify-center items-center md:hidden'>
             <div onClick={() => setLogoutPopUp(true)} className='w-auto h-auto my-3 text-black bg-gray-100 flex gap-3 py-2 items-center px-7 rounded-md cursor-pointer active:bg-red-100 active:text-red-500 md:hover:bg-red-100 md:hover:text-red-500'><IoIosLogOut size={20} /> Logout</div>
           </div>
