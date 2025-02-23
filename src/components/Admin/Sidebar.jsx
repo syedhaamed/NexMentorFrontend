@@ -20,6 +20,7 @@ import { MdPendingActions } from "react-icons/md";
 import { RiUserStarFill } from "react-icons/ri";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { MdOutlineFeaturedVideo } from "react-icons/md";
+import { VscReferences } from "react-icons/vsc";
 import { jwtDecode } from "jwt-decode";
 
 const backend = import.meta.env.VITE_BACKEND_URL;
@@ -174,6 +175,10 @@ function Sidebar() {
                         <NavLink onClick={handleSidebar} to='/admin-dashboard/testimonial' className={({ isActive }) => `${isActive ? 'shadow-custom-blue bg-[#0092DB]' : 'bg-inherit shadow-none'} text-xl w-[280px] px-8 py-3 rounded-2xl flex justify-start items-center gap-3 lg:px-4 lg:text-base lg:mx-0 active:bg-[#0092DB] active:shadow-custom-blue lg:hover:shadow-custom-blue cursor-pointer lg:hover:bg-[#0092DB]`}>
                             <FaRegNoteSticky size={25} />
                             Testimonial
+                        </NavLink>
+                        <NavLink onClick={handleSidebar} to='/admin-dashboard/custom-referrals' className={({ isActive }) => `${isActive ? 'shadow-custom-blue bg-[#0092DB]' : 'bg-inherit shadow-none'} text-xl w-[280px] px-8 py-3 rounded-2xl flex justify-start items-center gap-3 lg:px-4 lg:text-base lg:mx-0 active:bg-[#0092DB] active:shadow-custom-blue lg:hover:shadow-custom-blue cursor-pointer lg:hover:bg-[#0092DB]`}>
+                            <VscReferences size={25} />
+                            Custom Referrals
                         </NavLink>
                         <button onClick={() => setLogoutPopUp(true)} className='text-xl w-[280px] px-8 py-3 rounded-2xl flex justify-start items-center gap-3 lg:px-4 lg:text-base lg:mx-0 active:bg-[#0092DB] active:shadow-custom-blue lg:hover:shadow-custom-blue cursor-pointer lg:hover:bg-[#0092DB]'>
                             <MdLogout size={25} />

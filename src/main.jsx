@@ -59,6 +59,7 @@ import FaqMentor from './components/FaqMentor.jsx'
 import HowItWorks from './components/HowItWorks.jsx'
 import FaqStudents from './components/FaqStudents.jsx'
 import WhyChooseUsPage from './components/WhyChooseUsPage.jsx'
+import CustomReferrals from './components/Admin/CustomReferrals.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -118,6 +119,7 @@ const router = createBrowserRouter(
         <Route path='/admin-dashboard/admin-updates' element={<AdminUpdates />} />
         <Route path='/admin-dashboard/webinars' element={<Webinars />} />
         <Route path='/admin-dashboard/testimonial' element={<AddTestimonial />} />
+        <Route path='/admin-dashboard/custom-referrals' element={<CustomReferrals />} />
       </Route>
       <Route path='/admin/login' element={<AdminLogin />} />
     </>
