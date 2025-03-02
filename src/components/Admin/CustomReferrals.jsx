@@ -17,6 +17,8 @@ function CustomReferrals() {
         name: '',
         code: ''
     })
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedReferralId, setSelectedReferralId] = useState(null);
     const navigate = useNavigate()
 
     function handleStateChange() {
@@ -35,15 +37,29 @@ function CustomReferrals() {
         }
     }
 
-    async function handleDelete(id) {
+    function openDeleteModal(id) {
+        setSelectedReferralId(id);
+        setShowDeleteModal(true);
+    }
+
+    function closeDeleteModal() {
+        setSelectedReferralId(null);
+        setShowDeleteModal(false);
+    }
+
+    async function confirmDelete() {
+        if (!selectedReferralId) return;
+
         try {
-            const response = await axios.delete(`${backend}/api/v1/referred/delete/${id}`)
+            const response = await axios.delete(`${backend}/api/v1/referred/delete/${selectedReferralId}`)
             if (response.data.statusCode === 200) {
                 alert('Referral deleted successfully')
                 getReferrals()
             }
         } catch (error) {
             console.log("Error while deleting referrals", error);
+        } finally {
+            closeDeleteModal();
         }
     }
 
@@ -82,9 +98,32 @@ function CustomReferrals() {
 
     return (
         <>
-            {
-                loading && <Loading />
-            }
+            {loading && <Loading />}
+
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-5 rounded-lg shadow-lg w-96">
+                        <h2 className="text-lg font-semibold">Confirm Deletion</h2>
+                        <p className="text-gray-700 my-4">Are you sure you want to delete this referral?</p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={closeDeleteModal}
+                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmDelete}
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className='w-full h-auto flex flex-col bg-[#F4F4F4] lg:w-[70%] xl:w-[75%] 2xl:w-[80%]'>
                 <Header handleStateChange={handleStateChange} />
                 <div className={`${localSidebarState ? 'hidden' : 'flex'} w-[95%] mx-auto px-2 rounded-2xl my-8 min-h-[90vh] max-h-auto flex flex-col py-6 bg-white xl:px-5`}>
@@ -145,7 +184,7 @@ function CustomReferrals() {
                                         <td className='p-3 border'>{referral.studentsCompletedSessions}</td>
                                         <td className='p-3 border'>
                                             <button
-                                                onClick={() => handleDelete(referral._id)}
+                                                onClick={() => openDeleteModal(referral._id)}
                                                 className='bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition'
                                             >
                                                 Delete
@@ -162,4 +201,4 @@ function CustomReferrals() {
     )
 }
 
-export default CustomReferrals
+export default CustomReferrals;
